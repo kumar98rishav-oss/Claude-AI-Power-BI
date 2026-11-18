@@ -1,0 +1,136 @@
+/// One row per day, Jan 2024 - Dec 2025. Fiscal year starts 1 July.
+table Dim_Date
+	lineageTag: b4d1ae0f-9af0-5abd-bf7a-eba77a73508d
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isUnique
+		isKey
+		formatString: yyyy-mm-dd
+		lineageTag: 196df637-0f0f-506b-84d5-958a463ce005
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 477ff51b-5df1-580a-9289-737dbd6a774b
+		summarizeBy: none
+		sourceColumn: Year
+
+	column Quarter
+		dataType: string
+		lineageTag: 873c951c-4e83-5d0d-85f2-43e120d7daed
+		summarizeBy: none
+		sourceColumn: Quarter
+		sortByColumn: QuarterNo
+
+	column QuarterNo
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8b52af4b-1b4c-545a-af47-7ed0e1ed28c3
+		summarizeBy: none
+		sourceColumn: QuarterNo
+
+	column MonthNo
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 75c070d0-41df-5f41-bb45-712cbf92efae
+		summarizeBy: none
+		sourceColumn: MonthNo
+
+	column Month
+		dataType: string
+		lineageTag: 724c6634-4999-5556-9e9f-c49fa10b9e32
+		summarizeBy: none
+		sourceColumn: Month
+		sortByColumn: MonthNo
+
+	column MonthYear
+		dataType: string
+		lineageTag: 83d29e41-33ef-5d7b-bc47-05beb47b0df0
+		summarizeBy: none
+		sourceColumn: MonthYear
+		sortByColumn: YearMonth
+
+	column YearMonth
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b385fd27-10ca-556c-a03b-45d5700dfe18
+		summarizeBy: none
+		sourceColumn: YearMonth
+
+	column WeekdayNo
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3574bf0f-7405-507a-96d1-1c1894ad8872
+		summarizeBy: none
+		sourceColumn: WeekdayNo
+
+	column Weekday
+		dataType: string
+		lineageTag: c8d539b4-b1e4-5a8b-a066-b3c858b7302f
+		summarizeBy: none
+		sourceColumn: Weekday
+		sortByColumn: WeekdayNo
+
+	column IsWeekend
+		dataType: string
+		lineageTag: c94de575-6ce2-5127-836f-c923e62afbb0
+		summarizeBy: none
+		sourceColumn: IsWeekend
+
+	column FiscalYear
+		dataType: string
+		lineageTag: e7e09bc2-556f-59a4-818c-a6d98d0e515e
+		summarizeBy: none
+		sourceColumn: FiscalYear
+
+	column FiscalQuarter
+		dataType: string
+		lineageTag: 1c20e232-eb3a-5c89-9b4b-265ec994a848
+		summarizeBy: none
+		sourceColumn: FiscalQuarter
+
+	column FiscalMonthNo
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d895b044-849c-57e2-b0a7-8fae4ebf07c7
+		summarizeBy: none
+		sourceColumn: FiscalMonthNo
+
+	hierarchy Calendar
+		lineageTag: 021285cb-f8ab-57ef-bc7c-87bc8d81e288
+
+		level Year
+			lineageTag: 35198ec5-3d5f-50a8-8272-112a82714451
+			column: Year
+
+		level Quarter
+			lineageTag: ef3f2b4f-3efb-596d-8f8e-fb234f5c435b
+			column: Quarter
+
+		level Month
+			lineageTag: f4d53909-7e86-54d5-921c-f817498ca647
+			column: Month
+
+	partition Dim_Date = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Dim_Date.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Date", type date}, {"Year", Int64.Type}, {"Quarter", type text}, {"QuarterNo", Int64.Type}, {"MonthNo", Int64.Type}, {"Month", type text}, {"MonthYear", type text}, {"YearMonth", Int64.Type}, {"WeekdayNo", Int64.Type}, {"Weekday", type text}, {"IsWeekend", type text}, {"FiscalYear", type text}, {"FiscalQuarter", type text}, {"FiscalMonthNo", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

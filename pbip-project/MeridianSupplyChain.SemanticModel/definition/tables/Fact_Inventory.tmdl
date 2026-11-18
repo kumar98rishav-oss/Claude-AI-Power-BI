@@ -1,0 +1,80 @@
+/// Month-end stock snapshot per product and warehouse. Semi-additive: never sum across dates.
+table Fact_Inventory
+	lineageTag: 0f5a60df-7ab6-5150-ab42-29d2d2a85051
+
+	column SnapshotDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 65d414bb-b112-52a6-87df-52a116c4965d
+		summarizeBy: none
+		sourceColumn: SnapshotDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e1ae4536-ea71-557b-a35d-4dcec0343d2f
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+	column WarehouseKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dbe8d5e4-bde6-5ec9-a70c-ec559e8d2145
+		summarizeBy: none
+		sourceColumn: WarehouseKey
+
+	column OnHandQty
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cada7687-2e36-550e-b6cf-a53993ac90cf
+		summarizeBy: none
+		sourceColumn: OnHandQty
+
+	column OnOrderQty
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 78e645b8-1992-5934-9fcf-5a84a2b85655
+		summarizeBy: none
+		sourceColumn: OnOrderQty
+
+	column SafetyStockQty
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f93b3795-1545-5487-b786-fb21521177c2
+		summarizeBy: none
+		sourceColumn: SafetyStockQty
+
+	column ReorderPointQty
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 22a77e84-a09f-5c69-806e-167b530e1e57
+		summarizeBy: none
+		sourceColumn: ReorderPointQty
+
+	column InventoryValue
+		dataType: double
+		isHidden
+		lineageTag: 11d48b83-1ea6-555b-811d-3e03de30b4cf
+		summarizeBy: none
+		sourceColumn: InventoryValue
+
+	partition Fact_Inventory = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Fact_Inventory.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"SnapshotDate", type date}, {"ProductKey", Int64.Type}, {"WarehouseKey", Int64.Type}, {"OnHandQty", Int64.Type}, {"OnOrderQty", Int64.Type}, {"SafetyStockQty", Int64.Type}, {"ReorderPointQty", Int64.Type}, {"InventoryValue", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

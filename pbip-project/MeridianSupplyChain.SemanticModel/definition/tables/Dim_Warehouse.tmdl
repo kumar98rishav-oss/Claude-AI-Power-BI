@@ -1,0 +1,72 @@
+/// 5 regional distribution centres.
+table Dim_Warehouse
+	lineageTag: f29e8f18-7e7a-5e23-b224-7f03a05a9d51
+
+	column WarehouseKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e89297b8-ae2d-514e-b93e-c422259a3252
+		summarizeBy: none
+		sourceColumn: WarehouseKey
+
+	column WarehouseCode
+		dataType: string
+		lineageTag: 2d42567b-d403-5354-a409-8e4ec45e7660
+		summarizeBy: none
+		sourceColumn: WarehouseCode
+
+	column WarehouseName
+		dataType: string
+		lineageTag: de15f3d7-8e20-540f-8e01-fa0b62a8d110
+		summarizeBy: none
+		sourceColumn: WarehouseName
+
+	column City
+		dataType: string
+		lineageTag: fe9777ac-61e7-57fd-bb65-43e92a1f21a4
+		summarizeBy: none
+		sourceColumn: City
+
+	column State
+		dataType: string
+		lineageTag: 1e27d530-03db-508c-8f4d-29a9cd0585f1
+		summarizeBy: none
+		sourceColumn: State
+
+	column Region
+		dataType: string
+		lineageTag: 3caf9d22-df9e-50bf-9ac9-ae81085a1c32
+		summarizeBy: none
+		sourceColumn: Region
+
+	column CapacityUnits
+		dataType: int64
+		formatString: #,##0
+		lineageTag: e53e36f4-51bb-51e1-afb1-4d10de0ddd45
+		summarizeBy: none
+		sourceColumn: CapacityUnits
+
+	hierarchy Network
+		lineageTag: 9863cd80-ab48-50e8-b4b1-e8097aa6903e
+
+		level Region
+			lineageTag: 6244defa-77d2-554b-a30d-3ea2a3b77c83
+			column: Region
+
+		level WarehouseName
+			lineageTag: 29031cd9-79b2-5080-a8b3-855e60a786e6
+			column: WarehouseName
+
+	partition Dim_Warehouse = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Dim_Warehouse.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"WarehouseKey", Int64.Type}, {"WarehouseCode", type text}, {"WarehouseName", type text}, {"City", type text}, {"State", type text}, {"Region", type text}, {"CapacityUnits", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

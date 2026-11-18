@@ -1,0 +1,145 @@
+/// One row per sales order line. Blank ShipDate/DeliveryDate = not yet shipped/delivered.
+table Fact_Sales
+	lineageTag: 749f08a3-b64f-5985-bb44-db51f0326cb7
+
+	column SalesLineKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e6e3e392-3c50-5dae-ae3d-d754d57ad12a
+		summarizeBy: none
+		sourceColumn: SalesLineKey
+
+	column SalesOrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: f1063bc9-56d5-571c-bf5e-2de095ea4dc0
+		summarizeBy: none
+		sourceColumn: SalesOrderID
+
+	column LineNo
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 63cbe97f-ee8d-5e89-9cbd-ef0d09e47e44
+		summarizeBy: none
+		sourceColumn: LineNo
+
+	column OrderDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: bca24d43-d09b-5574-8e8a-1eaae63fcf70
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column RequestedDeliveryDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 14b32f84-c604-5220-93a3-8839305e99e2
+		summarizeBy: none
+		sourceColumn: RequestedDeliveryDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ShipDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 4bd2af3c-edbf-5392-9b8a-481397180e42
+		summarizeBy: none
+		sourceColumn: ShipDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DeliveryDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 6ed648bd-ff1e-53e2-ae61-adca700d74cd
+		summarizeBy: none
+		sourceColumn: DeliveryDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CustomerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 05c5e6a8-ea1b-501e-a53d-b3f6b4fc4830
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 534312f8-db7e-5f34-b51d-ed26aad5c7dc
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+	column WarehouseKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 99c860ed-8be6-54be-8290-a6003d7c1489
+		summarizeBy: none
+		sourceColumn: WarehouseKey
+
+	column CarrierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 95b1b808-51b5-57df-ae7e-57053ab20a66
+		summarizeBy: none
+		sourceColumn: CarrierKey
+
+	column Quantity
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 443e3289-3bb2-55c4-b2df-633f7200c712
+		summarizeBy: none
+		sourceColumn: Quantity
+
+	column UnitPrice
+		dataType: double
+		isHidden
+		lineageTag: b74617b2-6555-5a6c-acde-6377b5e0fc16
+		summarizeBy: none
+		sourceColumn: UnitPrice
+
+	column DiscountPct
+		dataType: double
+		isHidden
+		formatString: 0%
+		lineageTag: ce31102e-ff86-5d75-b087-48f571f00226
+		summarizeBy: none
+		sourceColumn: DiscountPct
+
+	column SalesAmount
+		dataType: double
+		isHidden
+		lineageTag: 29dd9fee-dac7-5488-a910-6045a5750968
+		summarizeBy: none
+		sourceColumn: SalesAmount
+
+	column CostAmount
+		dataType: double
+		isHidden
+		lineageTag: 0ef9d82d-74ea-5e21-a501-2a09eaab5f08
+		summarizeBy: none
+		sourceColumn: CostAmount
+
+	partition Fact_Sales = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Fact_Sales.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    BlanksToNull = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, {"ShipDate", "DeliveryDate"}),
+				    Typed = Table.TransformColumnTypes(BlanksToNull, {{"SalesLineKey", Int64.Type}, {"SalesOrderID", Int64.Type}, {"LineNo", Int64.Type}, {"OrderDate", type date}, {"RequestedDeliveryDate", type date}, {"ShipDate", type date}, {"DeliveryDate", type date}, {"CustomerKey", Int64.Type}, {"ProductKey", Int64.Type}, {"WarehouseKey", Int64.Type}, {"CarrierKey", Int64.Type}, {"Quantity", Int64.Type}, {"UnitPrice", type number}, {"DiscountPct", type number}, {"SalesAmount", type number}, {"CostAmount", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

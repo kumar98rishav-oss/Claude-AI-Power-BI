@@ -1,0 +1,63 @@
+/// 150 healthcare customers.
+table Dim_Customer
+	lineageTag: ff20d761-6f86-5729-aaf7-96bafe1e7304
+
+	column CustomerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3184373f-476e-572c-9a97-69abc554e435
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+	column CustomerName
+		dataType: string
+		lineageTag: 99ed5a38-ee0e-55b0-a942-fde10cc5e915
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+	column CustomerType
+		dataType: string
+		lineageTag: 24819d26-25bd-5369-a015-0aff10019f80
+		summarizeBy: none
+		sourceColumn: CustomerType
+
+	column City
+		dataType: string
+		lineageTag: 6ff5514e-3c16-5402-bc4a-e1eed9f6f060
+		summarizeBy: none
+		sourceColumn: City
+
+	column State
+		dataType: string
+		lineageTag: 6f76efae-ce15-558a-9c8d-c1d67d7b2714
+		summarizeBy: none
+		sourceColumn: State
+
+	column Region
+		dataType: string
+		lineageTag: 2d93dd08-587d-5328-b049-c854739a3be5
+		summarizeBy: none
+		sourceColumn: Region
+
+	column CustomerSince
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: a65431f0-aecc-5559-8232-2d86967beed9
+		summarizeBy: none
+		sourceColumn: CustomerSince
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Dim_Customer = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Dim_Customer.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"CustomerKey", Int64.Type}, {"CustomerName", type text}, {"CustomerType", type text}, {"City", type text}, {"State", type text}, {"Region", type text}, {"CustomerSince", type date}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

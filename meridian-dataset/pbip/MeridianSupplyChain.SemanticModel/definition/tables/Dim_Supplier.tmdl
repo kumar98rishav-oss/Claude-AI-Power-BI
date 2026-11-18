@@ -1,0 +1,55 @@
+/// 12 suppliers. Reached from purchases through Dim_Product (snowflake).
+table Dim_Supplier
+	lineageTag: 7c6b742b-f103-5aa4-aa6b-80d38593e3ce
+
+	column SupplierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6a0b8ec2-fb58-566d-89b1-58050dc02a32
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+	column SupplierName
+		dataType: string
+		lineageTag: 204297af-9e2d-58a5-8956-05b7dffde2aa
+		summarizeBy: none
+		sourceColumn: SupplierName
+
+	column Country
+		dataType: string
+		lineageTag: 8bfee35e-06a7-576f-a6e6-a306916bacf6
+		summarizeBy: none
+		sourceColumn: Country
+
+	column StandardLeadTimeDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 8b04896a-8642-52ed-a567-b567be0bab1e
+		summarizeBy: none
+		sourceColumn: StandardLeadTimeDays
+
+	column PaymentTerms
+		dataType: string
+		lineageTag: f00b4204-f7d0-5265-b12e-ecd0f3b9d761
+		summarizeBy: none
+		sourceColumn: PaymentTerms
+
+	column SupplierTier
+		dataType: string
+		lineageTag: 78976881-3740-5468-8511-1e769ed3524c
+		summarizeBy: none
+		sourceColumn: SupplierTier
+
+	partition Dim_Supplier = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Dim_Supplier.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"SupplierKey", Int64.Type}, {"SupplierName", type text}, {"Country", type text}, {"StandardLeadTimeDays", Int64.Type}, {"PaymentTerms", type text}, {"SupplierTier", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

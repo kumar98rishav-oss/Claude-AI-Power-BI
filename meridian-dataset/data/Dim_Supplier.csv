@@ -1,0 +1,13 @@
+SupplierKey,SupplierName,Country,StandardLeadTimeDays,PaymentTerms,SupplierTier
+1,Harbor Wound Solutions,USA,10,Net 30,Strategic
+2,Keystone Medical,USA,12,Net 45,Preferred
+3,Summit Surgical Co.,USA,14,Net 30,Strategic
+4,Cedar Lab Products,Canada,18,Net 60,Approved
+5,BrightCare Diagnostics,USA,9,Net 30,Strategic
+6,Pacific Rim Medical,Malaysia,28,Net 60,Preferred
+7,Evergreen PPE Ltd,Vietnam,30,Net 60,Preferred
+8,Meadow Safety Gear,USA,8,Net 30,Approved
+9,Atlas Mobility,USA,15,Net 45,Strategic
+10,Northgate Healthcare Supply,Mexico,20,Net 45,Approved
+11,Orion Infusion Systems,USA,12,Net 30,Strategic
+12,Lumen Diagnostics,Germany,25,Net 60,Approved

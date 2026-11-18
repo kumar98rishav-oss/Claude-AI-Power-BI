@@ -1,0 +1,6 @@
+/// Folder that holds the CSV files, ending in a backslash. Change it once and every table follows.
+expression DataFolder = "C:\Users\risha\Downloads\ProgrammersIO_Training\Meridian_SupplyChain\data\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 5916fd99-09e5-589c-ba9c-810fce07be94
+
+	annotation PBI_ResultType = Text
+

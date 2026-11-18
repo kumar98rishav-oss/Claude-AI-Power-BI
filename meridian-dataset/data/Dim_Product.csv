@@ -1,0 +1,61 @@
+ProductKey,SKU,ProductName,Category,Subcategory,SupplierKey,UnitCost,ListPrice,Status
+1,MS-1001,Sterile Gauze Pads 4x4 (100 pk),Wound Care,Dressings,1,5.65,10.74,Active
+2,MS-1002,Adhesive Bandages Assorted (100 pk),Wound Care,Bandages,2,26.19,43.42,Active
+3,MS-1003,Foam Dressing 6x6 (10 pk),Wound Care,Dressings,1,22.45,43.9,Active
+4,MS-1004,Hydrocolloid Dressing 4x4 (10 pk),Wound Care,Dressings,2,5.45,10.41,Active
+5,MS-1005,Elastic Bandage 4 in (12 pk),Wound Care,Bandages,1,11.38,19.33,Active
+6,MS-1006,Medical Tape 1 in (12 rolls),Wound Care,Tapes,2,9.4,17.65,Active
+7,MS-1007,Wound Cleanser Spray 8 oz,Wound Care,Cleansers,1,21.58,38.02,Active
+8,MS-1008,Alginate Dressing 4x4 (10 pk),Wound Care,Dressings,2,6.52,11.38,Active
+9,MS-1009,Non-Adherent Pads 3x4 (50 pk),Wound Care,Dressings,1,14.31,23.58,Active
+10,MS-1010,Skin Closure Strips (50 pk),Wound Care,Closures,2,11.81,22.28,Active
+11,MS-1011,Surgical Scalpel No.10 (10 pk),Surgical Supplies,Blades,3,54.87,106.61,Active
+12,MS-1012,Suture Kit Nylon 3-0 (12 pk),Surgical Supplies,Sutures,2,72.47,132.93,Active
+13,MS-1013,Sterile Drape 40x40 (20 pk),Surgical Supplies,Drapes,3,59.66,116.58,Active
+14,MS-1014,Surgical Sponge 4x4 (200 pk),Surgical Supplies,Sponges,2,51.28,88.7,Active
+15,MS-1015,Skin Stapler 35W,Surgical Supplies,Closures,3,43.51,78.27,Active
+16,MS-1016,Disposable Instrument Tray,Surgical Supplies,Instruments,2,71.97,132.68,Active
+17,MS-1017,Surgical Blade No.15 (100 pk),Surgical Supplies,Blades,3,20.27,42.58,Discontinued
+18,MS-1018,Disposable Hemostat Forceps (25 pk),Surgical Supplies,Instruments,2,52.51,103.59,Active
+19,MS-1019,Surgical Skin Marker (10 pk),Surgical Supplies,Accessories,3,67.24,128.87,Active
+20,MS-1020,Specimen Container 4 oz (100 pk),Surgical Supplies,Accessories,2,31.53,67.25,Active
+21,MS-1021,Rapid Flu A/B Test (25 pk),Diagnostics,Rapid Tests,5,26.47,55.08,Active
+22,MS-1022,COVID-19 Antigen Test (25 pk),Diagnostics,Rapid Tests,12,12.67,25.51,Active
+23,MS-1023,Glucose Test Strips (50 pk),Diagnostics,Test Strips,5,36.66,67.77,Active
+24,MS-1024,Urinalysis Strips (100 pk),Diagnostics,Test Strips,12,34.5,65.31,Active
+25,MS-1025,Digital Thermometer,Diagnostics,Devices,5,12.42,24.92,Active
+26,MS-1026,Fingertip Pulse Oximeter,Diagnostics,Devices,12,12.11,25.4,Active
+27,MS-1027,Adult Blood Pressure Cuff,Diagnostics,Devices,5,47.71,93.8,Active
+28,MS-1028,Pregnancy Test Cassette (50 pk),Diagnostics,Rapid Tests,12,54.61,104.3,Active
+29,MS-1029,Safety Lancets 28G (200 pk),Diagnostics,Consumables,5,40.24,82.9,Active
+30,MS-1030,Strep A Rapid Test (25 pk),Diagnostics,Rapid Tests,12,39.14,74.43,Active
+31,MS-1031,Nitrile Exam Gloves M (100 pk),PPE,Gloves,7,21.27,35.68,Active
+32,MS-1032,Nitrile Exam Gloves L (100 pk),PPE,Gloves,8,24.23,37.35,Active
+33,MS-1033,N95 Respirator (20 pk),PPE,Respiratory,7,22.34,37.19,Active
+34,MS-1034,Surgical Mask Level 3 (50 pk),PPE,Respiratory,8,14.46,21.36,Active
+35,MS-1035,Isolation Gown (10 pk),PPE,Apparel,7,4.44,7.3,Active
+36,MS-1036,Face Shield (24 pk),PPE,Apparel,8,25.48,38.32,Active
+37,MS-1037,Shoe Covers (100 pk),PPE,Apparel,7,9.77,17.28,Active
+38,MS-1038,Bouffant Cap (100 pk),PPE,Apparel,8,26.69,44.7,Active
+39,MS-1039,Hand Sanitizer 500 ml,PPE,Hygiene,7,13.47,20.8,Active
+40,MS-1040,Disinfectant Wipes (160 ct),PPE,Hygiene,8,4.8,8.11,Active
+41,MS-1041,Folding Walker,Mobility Aids,Walking Aids,9,21.53,40.78,Active
+42,MS-1042,Standard Wheelchair 18 in,Mobility Aids,Wheelchairs,10,64.28,115.34,Active
+43,MS-1043,Quad Cane,Mobility Aids,Walking Aids,9,23.05,36.31,Active
+44,MS-1044,Forearm Crutches (pair),Mobility Aids,Walking Aids,10,148.8,244.93,Active
+45,MS-1045,Rollator 4-Wheel,Mobility Aids,Walking Aids,9,113.45,216.19,Active
+46,MS-1046,Transfer Bench,Mobility Aids,Bathroom Safety,10,65.68,121.43,Active
+47,MS-1047,Raised Toilet Seat,Mobility Aids,Bathroom Safety,9,68.71,111.7,Active
+48,MS-1048,Bed Assist Rail,Mobility Aids,Bed Safety,10,120.68,226.91,Active
+49,MS-1049,Knee Scooter,Mobility Aids,Wheelchairs,9,92.69,160.17,Discontinued
+50,MS-1050,Shower Chair,Mobility Aids,Bathroom Safety,10,115.24,187.99,Active
+51,MS-1051,IV Start Kit,Infusion,IV Access,11,41.49,63.0,Active
+52,MS-1052,IV Catheter 22G (50 pk),Infusion,IV Access,6,23.2,41.95,Active
+53,MS-1053,Infusion Pump Tubing Set (20 pk),Infusion,IV Sets,11,92.46,124.94,Active
+54,MS-1054,Saline Flush Syringe 10 ml (30 pk),Infusion,Flushes,6,50.37,78.09,Active
+55,MS-1055,Extension Set 7 in (50 pk),Infusion,IV Sets,11,8.88,13.89,Active
+56,MS-1056,Primary IV Set 60 drop (50 pk),Infusion,IV Sets,6,89.19,139.76,Active
+57,MS-1057,Luer Lock Syringe 10 ml (100 pk),Infusion,Syringes,11,16.26,25.23,Active
+58,MS-1058,Hypodermic Needle 21G (100 pk),Infusion,Needles,6,102.2,157.89,Active
+59,MS-1059,Sharps Container 2 gal,Infusion,Sharps,11,69.14,106.05,Active
+60,MS-1060,Latex-Free Tourniquet (25 pk),Infusion,IV Access,6,16.62,26.49,Active

@@ -1,0 +1,9 @@
+Table,Issue,Detail,How to detect
+Fact_Sales,Orphan key,"3 rows with ProductKey 999, which is not in Dim_Product",LEFT JOIN Dim_Product; ProductKey 999
+Fact_Sales,Duplicate rows,2 order lines appear twice with the same SalesLineKey,GROUP BY SalesLineKey HAVING COUNT(*) > 1
+Fact_Sales,Negative quantity,SalesLineKey 8312 has a negative Quantity with no return flag,Quantity < 0
+Fact_Sales,Missing customer,4 rows with a blank CustomerKey,CustomerKey IS NULL
+Fact_Sales,Text in a numeric column,SalesLineKey 4987 has DiscountPct stored as '5%',Power Query type-change error on DiscountPct
+Fact_Sales,Mixed date formats,3 OrderDate values written as MM/DD/YYYY instead of ISO,Power Query date parse errors
+Dim_Customer,Inconsistent text,"Region in lower case on one row, a trailing space on another, leading spaces in one CustomerName",DISTINCT Region returns extra values
+Dim_Customer,Duplicate key,"CustomerKey 61 appears twice with different names, which breaks a one-to-many relationship",GROUP BY CustomerKey HAVING COUNT(*) > 1

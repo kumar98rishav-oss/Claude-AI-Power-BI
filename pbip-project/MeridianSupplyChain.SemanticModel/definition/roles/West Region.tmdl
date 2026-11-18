@@ -1,0 +1,8 @@
+/// Static row-level security: members see only the West region warehouse and its sales, purchases and stock.
+role 'West Region'
+	modelPermission: read
+
+	tablePermission Dim_Warehouse = Dim_Warehouse[Region] = "West"
+
+	annotation PBI_Id = b08e5b6913cf4ea682670dc818f3645d
+

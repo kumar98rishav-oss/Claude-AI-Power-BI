@@ -1,0 +1,91 @@
+/// 60 products in 6 categories. Each product has one supplier.
+table Dim_Product
+	lineageTag: 0379388a-4998-567f-90d3-2e79607e6bca
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b97bf77f-9e2b-5599-b66c-ac8bd39afe6e
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+	column SKU
+		dataType: string
+		lineageTag: 3dce8f44-9544-5261-902a-84f583677bc7
+		summarizeBy: none
+		sourceColumn: SKU
+
+	column ProductName
+		dataType: string
+		lineageTag: 9734bacf-17c1-5186-9d47-e2ff3045a13c
+		summarizeBy: none
+		sourceColumn: ProductName
+
+	column Category
+		dataType: string
+		lineageTag: b9cee49b-842d-5631-862a-e76c840fcfc1
+		summarizeBy: none
+		sourceColumn: Category
+
+	column Subcategory
+		dataType: string
+		lineageTag: d70ea775-96d2-522d-ab10-0388725453db
+		summarizeBy: none
+		sourceColumn: Subcategory
+
+	column SupplierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: abd5c257-b864-5081-8f9c-30f53425dee0
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+	column UnitCost
+		dataType: double
+		formatString: \$#,##0.00
+		lineageTag: 222c14c3-815e-5b0b-b8ea-cb3dc8f3df39
+		summarizeBy: none
+		sourceColumn: UnitCost
+
+	column ListPrice
+		dataType: double
+		formatString: \$#,##0.00
+		lineageTag: f0df2fb4-5a7e-5551-9939-24937922127a
+		summarizeBy: none
+		sourceColumn: ListPrice
+
+	column Status
+		dataType: string
+		lineageTag: de7e5857-9164-52a1-af81-b4d521e7a15c
+		summarizeBy: none
+		sourceColumn: Status
+
+	hierarchy 'Product Hierarchy'
+		lineageTag: 6246b76c-8391-5036-bd0d-10c57bb0ced8
+
+		level Category
+			lineageTag: 6e625caa-bf0e-576b-aa58-7213517a2391
+			column: Category
+
+		level Subcategory
+			lineageTag: d38ce05b-e5de-5e5a-b081-2d83b65278af
+			column: Subcategory
+
+		level ProductName
+			lineageTag: f9567742-e5d1-5c75-8114-2d3721a76eaa
+			column: ProductName
+
+	partition Dim_Product = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Dim_Product.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"ProductKey", Int64.Type}, {"SKU", type text}, {"ProductName", type text}, {"Category", type text}, {"Subcategory", type text}, {"SupplierKey", Int64.Type}, {"UnitCost", type number}, {"ListPrice", type number}, {"Status", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

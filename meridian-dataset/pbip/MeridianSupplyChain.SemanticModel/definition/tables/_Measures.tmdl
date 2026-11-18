@@ -1,0 +1,224 @@
+/// Holds every measure. A convention: measures can live in any table.
+table _Measures
+	isHidden
+	lineageTag: 76596f4a-2ca5-583e-8400-fe9950e41bd4
+
+	/// Net sales after discount.
+	measure Revenue = SUM ( Fact_Sales[SalesAmount] )
+		formatString: \$#,##0
+		displayFolder: 01 Sales
+		lineageTag: a1220944-edb2-583c-a809-848ac5636264
+
+	measure Cost = SUM ( Fact_Sales[CostAmount] )
+		formatString: \$#,##0
+		displayFolder: 01 Sales
+		lineageTag: 7fb9c1dd-2cd9-52fc-9401-00c02b25e852
+
+	measure 'Gross Margin' = [Revenue] - [Cost]
+		formatString: \$#,##0
+		displayFolder: 01 Sales
+		lineageTag: 889a7eeb-f04e-5cea-8d7d-1a3334611ae5
+
+	/// Gross margin as a share of revenue.
+	measure 'Gross Margin %' = DIVIDE ( [Gross Margin], [Revenue] )
+		formatString: 0.0%
+		displayFolder: 01 Sales
+		lineageTag: ab341b6a-36c3-55b6-a01d-c3f284e4ff47
+
+	measure 'Units Sold' = SUM ( Fact_Sales[Quantity] )
+		formatString: #,##0
+		displayFolder: 01 Sales
+		lineageTag: ed5e9675-3c61-5a4a-b456-9b183884b740
+
+	measure Orders = DISTINCTCOUNT ( Fact_Sales[SalesOrderID] )
+		formatString: #,##0
+		displayFolder: 01 Sales
+		lineageTag: ba99a961-d733-5584-ad6a-c7fa4c768fa9
+
+	measure 'Avg Order Value' = DIVIDE ( [Revenue], [Orders] )
+		formatString: \$#,##0
+		displayFolder: 01 Sales
+		lineageTag: f53810bf-5d37-52d5-9997-fbb346c03be5
+
+	/// Revenue before discount.
+	measure 'Gross Sales' = SUMX ( Fact_Sales, Fact_Sales[Quantity] * Fact_Sales[UnitPrice] )
+		formatString: \$#,##0
+		displayFolder: 01 Sales
+		lineageTag: c73ee3c4-60cd-561c-85ed-9847bbb1dc7c
+
+	/// Discount given, weighted by sales value.
+	measure 'Avg Discount %' = DIVIDE ( [Gross Sales] - [Revenue], [Gross Sales] )
+		formatString: 0.0%
+		displayFolder: 01 Sales
+		lineageTag: 1e9ead00-8a70-5d04-a6d1-c2adaf170d44
+
+	/// Revenue for the same period last year.
+	measure 'Revenue PY' = CALCULATE ( [Revenue], SAMEPERIODLASTYEAR ( Dim_Date[Date] ) )
+		formatString: \$#,##0
+		displayFolder: 02 Time Intelligence
+		lineageTag: 37df9497-5e08-5799-b4f0-ec94141eb630
+
+	/// Blank unless one year is in context: across all years, last year is only part of the data.
+	measure 'Revenue YoY %' = IF ( HASONEVALUE ( Dim_Date[Year] ), DIVIDE ( [Revenue] - [Revenue PY], [Revenue PY] ) )
+		formatString: 0.0%
+		displayFolder: 02 Time Intelligence
+		lineageTag: 2376b15b-85f3-5d8b-9b96-4a076f0a059c
+
+	/// Calendar year to date.
+	measure 'Revenue YTD' = TOTALYTD ( [Revenue], Dim_Date[Date] )
+		formatString: \$#,##0
+		displayFolder: 02 Time Intelligence
+		lineageTag: 3cd7aa20-aaea-5318-bee4-6e5e024ca3ac
+
+	/// Fiscal year to date. The fiscal year ends on 30 June.
+	measure 'Revenue FYTD' = TOTALYTD ( [Revenue], Dim_Date[Date], "6/30" )
+		formatString: \$#,##0
+		displayFolder: 02 Time Intelligence
+		lineageTag: ea4d4dd8-70d5-5016-972a-9b0d73c9b9f6
+
+	/// Uses the inactive ShipDate relationship.
+	measure 'Revenue by Ship Date' = CALCULATE ( [Revenue], USERELATIONSHIP ( Fact_Sales[ShipDate], Dim_Date[Date] ) )
+		formatString: \$#,##0
+		displayFolder: 02 Time Intelligence
+		lineageTag: 76748aa8-158e-56fa-a80d-0edc88faa0b6
+
+	measure 'Lines Delivered' = CALCULATE ( COUNTROWS ( Fact_Sales ), NOT ISBLANK ( Fact_Sales[DeliveryDate] ) )
+		formatString: #,##0
+		displayFolder: 03 Delivery
+		lineageTag: bb1bc170-cde0-53a9-b54e-3ffbf10bc78c
+
+	/// Delivered lines that arrived on or before the requested date.
+	measure 'On-Time Delivery %' =
+			VAR OnTime =
+			    CALCULATE (
+			        COUNTROWS ( Fact_Sales ),
+			        FILTER ( Fact_Sales, NOT ISBLANK ( Fact_Sales[DeliveryDate] ) && Fact_Sales[DeliveryDate] <= Fact_Sales[RequestedDeliveryDate] )
+			    )
+			RETURN
+			    DIVIDE ( OnTime, [Lines Delivered] )
+		formatString: 0.0%
+		displayFolder: 03 Delivery
+		lineageTag: 60fe84c1-af4d-5c46-865f-7c864170e434
+
+	measure 'PO Lines' = COUNTROWS ( Fact_Purchases )
+		formatString: #,##0
+		displayFolder: 04 Procurement
+		lineageTag: 8aab8df9-05ee-50b2-918e-299609cf396c
+
+	measure 'Purchase Spend' = SUM ( Fact_Purchases[LineCost] )
+		formatString: \$#,##0
+		displayFolder: 04 Procurement
+		lineageTag: 27ccc4ac-a675-5d2d-989e-29f69c9fd863
+
+	measure 'Lines Received' = CALCULATE ( COUNTROWS ( Fact_Purchases ), NOT ISBLANK ( Fact_Purchases[ReceivedDate] ) )
+		formatString: #,##0
+		displayFolder: 04 Procurement
+		lineageTag: 460edc12-3af9-55d0-9d11-ff7c78f12e89
+
+	/// Ordered but not yet received.
+	measure 'Open PO Lines' = CALCULATE ( COUNTROWS ( Fact_Purchases ), ISBLANK ( Fact_Purchases[ReceivedDate] ) )
+		formatString: #,##0
+		displayFolder: 04 Procurement
+		lineageTag: 1740cf1d-c5ff-583e-8a75-0a4ac447473d
+
+	/// Received lines that arrived on or before the promised date.
+	measure 'Supplier On-Time %' =
+			VAR OnTime =
+			    CALCULATE (
+			        COUNTROWS ( Fact_Purchases ),
+			        FILTER ( Fact_Purchases, NOT ISBLANK ( Fact_Purchases[ReceivedDate] ) && Fact_Purchases[ReceivedDate] <= Fact_Purchases[PromisedDate] )
+			    )
+			RETURN
+			    DIVIDE ( OnTime, [Lines Received] )
+		formatString: 0.0%
+		displayFolder: 04 Procurement
+		lineageTag: 5ec2e7e3-8cc9-5cb9-880c-d1174ce27aff
+
+	/// Received lines delivered in the full quantity.
+	measure 'In-Full %' =
+			VAR InFull =
+			    CALCULATE (
+			        COUNTROWS ( Fact_Purchases ),
+			        FILTER ( Fact_Purchases, NOT ISBLANK ( Fact_Purchases[ReceivedDate] ) && Fact_Purchases[QtyReceived] >= Fact_Purchases[QtyOrdered] )
+			    )
+			RETURN
+			    DIVIDE ( InFull, [Lines Received] )
+		formatString: 0.0%
+		displayFolder: 04 Procurement
+		lineageTag: 761e2202-9bce-5b10-aaa8-fd2d5979e45b
+
+	/// On time and in full.
+	measure 'OTIF %' =
+			VAR Otif =
+			    CALCULATE (
+			        COUNTROWS ( Fact_Purchases ),
+			        FILTER (
+			            Fact_Purchases,
+			            NOT ISBLANK ( Fact_Purchases[ReceivedDate] )
+			                && Fact_Purchases[ReceivedDate] <= Fact_Purchases[PromisedDate]
+			                && Fact_Purchases[QtyReceived] >= Fact_Purchases[QtyOrdered]
+			        )
+			    )
+			RETURN
+			    DIVIDE ( Otif, [Lines Received] )
+		formatString: 0.0%
+		displayFolder: 04 Procurement
+		lineageTag: 0f26f257-6cf5-529e-abbe-8e938dde8e61
+
+	measure 'Avg Lead Time (Days)' = AVERAGEX ( FILTER ( Fact_Purchases, NOT ISBLANK ( Fact_Purchases[ReceivedDate] ) ), DATEDIFF ( Fact_Purchases[OrderDate], Fact_Purchases[ReceivedDate], DAY ) )
+		formatString: 0.0
+		displayFolder: 04 Procurement
+		lineageTag: b4f412bd-9e50-50bd-b593-dcc55430b298
+
+	/// Uses the Days Late calculated column.
+	measure 'Avg Days Late' = AVERAGE ( Fact_Purchases[Days Late] )
+		formatString: 0.0
+		displayFolder: 04 Procurement
+		lineageTag: 4ef1c487-18a2-57fc-aae8-940719930d0d
+
+	/// Uses the inactive ReceivedDate relationship.
+	measure 'Spend by Received Date' = CALCULATE ( [Purchase Spend], USERELATIONSHIP ( Fact_Purchases[ReceivedDate], Dim_Date[Date] ) )
+		formatString: \$#,##0
+		displayFolder: 04 Procurement
+		lineageTag: 371a98cd-5e40-509f-8e19-86290bfa2abb
+
+	/// Stock at the last snapshot in the period. Semi-additive.
+	measure 'On Hand Units' = CALCULATE ( SUM ( Fact_Inventory[OnHandQty] ), LASTNONBLANK ( Dim_Date[Date], CALCULATE ( COUNTROWS ( Fact_Inventory ) ) ) )
+		formatString: #,##0
+		displayFolder: 05 Inventory
+		lineageTag: 12a8fe2f-862e-57d7-8fe9-acd5c2a12627
+
+	/// Stock value at the last snapshot in the period.
+	measure 'Inventory Value' = CALCULATE ( SUM ( Fact_Inventory[InventoryValue] ), LASTNONBLANK ( Dim_Date[Date], CALCULATE ( COUNTROWS ( Fact_Inventory ) ) ) )
+		formatString: \$#,##0
+		displayFolder: 05 Inventory
+		lineageTag: 85f53b29-9a93-5579-b236-d29ff158cb33
+
+	/// Product-warehouse pairs with zero stock at the last snapshot.
+	measure Stockouts = CALCULATE ( COUNTROWS ( Fact_Inventory ), Fact_Inventory[OnHandQty] = 0, LASTNONBLANK ( Dim_Date[Date], CALCULATE ( COUNTROWS ( Fact_Inventory ) ) ) )
+		formatString: #,##0
+		displayFolder: 05 Inventory
+		lineageTag: 78663d1e-637d-5a61-8c9a-e9b3e11550e3
+
+	/// Product-warehouse pairs below safety stock at the last snapshot.
+	measure 'Below Safety Stock' =
+			CALCULATE (
+			    COUNTROWS ( Fact_Inventory ),
+			    FILTER ( Fact_Inventory, Fact_Inventory[OnHandQty] < Fact_Inventory[SafetyStockQty] ),
+			    LASTNONBLANK ( Dim_Date[Date], CALCULATE ( COUNTROWS ( Fact_Inventory ) ) )
+			)
+		formatString: #,##0
+		displayFolder: 05 Inventory
+		lineageTag: beba243d-db15-5b18-99aa-1bcb037e1bbd
+
+	column m
+		dataType: int64
+		isHidden
+		lineageTag: b595b315-f0a7-5e30-9995-7457ab6196ca
+		summarizeBy: none
+		sourceColumn: m
+
+	partition _Measures = m
+		mode: import
+		source = let Source = #table(type table [m = Int64.Type], {{1}}) in Source
+

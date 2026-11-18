@@ -1,0 +1,5 @@
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
+**/.claude/settings.local.json
+__pycache__/
+*.bak

@@ -1,0 +1,43 @@
+/// 4 outbound carriers.
+table Dim_Carrier
+	lineageTag: 0724653d-a311-5af0-bb34-ac883c6eee18
+
+	column CarrierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1bdeec53-bf0f-5802-b8e5-bfb1ffc08590
+		summarizeBy: none
+		sourceColumn: CarrierKey
+
+	column CarrierName
+		dataType: string
+		lineageTag: 0d301556-0345-51d7-906b-7773bc27001a
+		summarizeBy: none
+		sourceColumn: CarrierName
+
+	column ServiceMode
+		dataType: string
+		lineageTag: 582af758-98c4-5766-a8b0-8ad76f46429f
+		summarizeBy: none
+		sourceColumn: ServiceMode
+
+	column StandardTransitDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 8a9d9b33-72bc-58b1-aafb-bb729b62032a
+		summarizeBy: none
+		sourceColumn: StandardTransitDays
+
+	partition Dim_Carrier = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Dim_Carrier.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"CarrierKey", Int64.Type}, {"CarrierName", type text}, {"ServiceMode", type text}, {"StandardTransitDays", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

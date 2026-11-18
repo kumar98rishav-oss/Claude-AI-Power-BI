@@ -1,0 +1,118 @@
+/// One row per purchase order line. Blank ReceivedDate = still open.
+table Fact_Purchases
+	lineageTag: f9c9ea9c-21bd-5fcb-9eaf-52493533b462
+
+	column PONumber
+		dataType: string
+		lineageTag: c0f44c1d-d1a5-5ad0-abd9-dc9361093b40
+		summarizeBy: none
+		sourceColumn: PONumber
+
+	column POLineNo
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e5b9f2d6-9f35-53f0-8b09-b04982122f27
+		summarizeBy: none
+		sourceColumn: POLineNo
+
+	column OrderDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 00b7b0cc-a5d2-5ecb-907a-be7d90504266
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column PromisedDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 55ed0eed-92b5-5194-9aec-ab08d4a7db4f
+		summarizeBy: none
+		sourceColumn: PromisedDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ReceivedDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 153c27e1-00aa-5686-a096-90731973d5b7
+		summarizeBy: none
+		sourceColumn: ReceivedDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column SupplierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 46ea8eaa-a803-5277-b4cd-a87f1db71949
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0aedfe36-c690-51b9-87eb-df0c5ebff2d8
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+	column WarehouseKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7509ef7d-6d24-5aaf-aefa-d6e83a3fd360
+		summarizeBy: none
+		sourceColumn: WarehouseKey
+
+	column QtyOrdered
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6995c052-b316-5895-af76-2fe0acc31930
+		summarizeBy: none
+		sourceColumn: QtyOrdered
+
+	column QtyReceived
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c6c3c12b-97c4-5c3b-b83d-7be3e15ed5fd
+		summarizeBy: none
+		sourceColumn: QtyReceived
+
+	column UnitCost
+		dataType: double
+		isHidden
+		lineageTag: cc7eaac8-3c6a-50e9-b87e-ab89888eb496
+		summarizeBy: none
+		sourceColumn: UnitCost
+
+	column LineCost
+		dataType: double
+		isHidden
+		lineageTag: 05406796-f8a2-5abe-803f-dc680f198e77
+		summarizeBy: none
+		sourceColumn: LineCost
+
+	column 'Days Late' = IF ( ISBLANK ( Fact_Purchases[ReceivedDate] ), BLANK (), MAX ( 0, DATEDIFF ( Fact_Purchases[PromisedDate], Fact_Purchases[ReceivedDate], DAY ) ) )
+		dataType: int64
+		formatString: 0
+		lineageTag: 46118b8a-f1cc-5c0e-babd-9a4487c1e5f4
+		summarizeBy: none
+
+	partition Fact_Purchases = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "Fact_Purchases.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    BlanksToNull = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, {"ReceivedDate", "QtyReceived"}),
+				    Typed = Table.TransformColumnTypes(BlanksToNull, {{"PONumber", type text}, {"POLineNo", Int64.Type}, {"OrderDate", type date}, {"PromisedDate", type date}, {"ReceivedDate", type date}, {"SupplierKey", Int64.Type}, {"ProductKey", Int64.Type}, {"WarehouseKey", Int64.Type}, {"QtyOrdered", Int64.Type}, {"QtyReceived", Int64.Type}, {"UnitCost", type number}, {"LineCost", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

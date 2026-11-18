@@ -1,0 +1,151 @@
+CustomerKey,CustomerName,CustomerType,City,State,Region,CustomerSince
+1,Quincy Hill Medical Center,Hospital,Baton Rouge,LA,Central,2019-09-26
+2,Oakridge Surgery Center,Surgery Center,Raleigh,NC,South,2020-11-18
+3,Meadowbrook Family Clinic,Clinic,Green Bay,WI,Midwest,2023-03-24
+4,Kensington Surgery Center,Surgery Center,Baton Rouge,LA,Central,2023-06-19
+5,Southport Medical Center,Hospital,Orlando,FL,South,2018-06-28
+6,Willow Creek Family Clinic,Clinic,Grand Rapids,MI,Midwest,2021-09-26
+7,Maple Grove Care Home,Nursing Home,Lowell,MA,Northeast,2021-11-14
+8,Vale Pharmacy,Pharmacy,Topeka,KS,Central,2022-06-26
+9,Yorkshire Surgery Center,Surgery Center,Lowell,MA,Northeast,2018-11-03
+10,Silver Lake Care Home,Nursing Home,Sacramento,CA,West,2023-06-15
+11,Dover Plains Family Clinic,Clinic,Mesa,AZ,West,2021-02-04
+12,Fairhaven Medical Center,Hospital,Columbus,OH,Midwest,2023-01-07
+13,Linden Family Clinic,Clinic,Wichita,KS,Central,2018-10-05
+14,Fairhaven Pharmacy,Pharmacy,Norman,OK,Central,2018-03-15
+15,Pine Valley Family Clinic,Clinic,Peoria,IL,Midwest,2022-05-24
+16,Ironwood Care Home,Nursing Home,Springfield,IL,Midwest,2019-07-04
+17,Thornbury Pharmacy,Pharmacy,Wichita,KS,Central,2021-10-12
+18,Sheffield Family Clinic,Clinic,Peoria,IL,Midwest,2018-07-23
+19,Elmwood Pharmacy,Pharmacy,Macon,GA,South,2023-05-30
+20,Highland Park Pharmacy,Pharmacy,Tacoma,WA,West,2017-05-26
+21,Prescott Family Clinic,Clinic,Lowell,MA,Northeast,2023-01-31
+22,Harbor Point Medical Center,Hospital,Fresno,CA,West,2019-02-25
+23,Fairhaven Family Clinic,Clinic,Buffalo,NY,Northeast,2020-10-27
+24,Pine Valley Care Home,Nursing Home,Macon,GA,South,2018-12-18
+25,Glenwood Surgery Center,Surgery Center,Mesa,AZ,West,2018-05-08
+26,Prescott Medical Center,Hospital,Mobile,AL,South,2021-06-03
+27,Kingsley Medical Center,Hospital,Albany,NY,Northeast,2020-03-17
+28,Kensington Family Clinic,Clinic,Columbus,OH,Midwest,2017-04-10
+29,Rosewood Care Home,Nursing Home,Hartford,CT,Northeast,2022-09-17
+30,Foxborough Family Clinic,Clinic,Huntsville,AL,South,2018-03-31
+31,Eastgate Family Clinic,Clinic,Las Vegas,NV,West,2021-06-10
+32,Alder Bay Family Clinic,Clinic,Lansing,MI,Midwest,2017-07-04
+33,Cedar Ridge Surgery Center,Surgery Center,Huntsville,AL,South,2017-09-06
+34,Newbury Care Home,Nursing Home,New Haven,CT,Northeast,2018-08-30
+35,Glenwood Medical Center,Hospital,Madison,WI,Midwest,2020-11-21
+36,Linden Pharmacy,Pharmacy,Camden,NJ,Northeast,2023-09-09
+37,Birchwood Family Clinic,Clinic,Dayton,OH,Midwest,2018-09-09
+38,Hartwell Surgery Center,Surgery Center,Shreveport,LA,Central,2023-07-25
+39,Vale Family Clinic,Clinic,Peoria,IL,Midwest,2021-06-15
+40,Brookside Care Home,Nursing Home,Macon,GA,South,2022-10-05
+41,Ashford Family Clinic,Clinic,Madison,WI,Midwest,2017-06-18
+42,Oakridge Family Clinic,Clinic,Springfield,IL,Midwest,2022-07-09
+43,Granite Falls Surgery Center,Surgery Center,Trenton,NJ,Northeast,2020-11-13
+44,Stonebridge Family Clinic,Clinic,Las Vegas,NV,West,2023-09-07
+45,Yorkshire Pharmacy,Pharmacy,New Haven,CT,Northeast,2019-11-28
+46,Northfield Medical Center,Hospital,Worcester,MA,Northeast,2019-04-18
+47,Northfield Family Clinic,Clinic,New Haven,CT,Northeast,2023-08-25
+48,Bellmont Family Clinic,Clinic,Durham,NC,South,2017-05-18
+49,Sheffield Pharmacy,Pharmacy,Norman,OK,Central,2021-12-10
+50,Juniper Medical Center,Hospital,Topeka,KS,Central,2022-09-18
+51,Silver Lake Pharmacy,Pharmacy,Green Bay,WI,Midwest,2020-10-26
+52,Vale Care Home,Nursing Home,Worcester,MA,Northeast,2021-03-04
+53,Maple Grove Pharmacy,Pharmacy,Hartford,CT,Northeast,2022-07-20
+54,Hartwell Pharmacy,Pharmacy,Raleigh,NC,South,2019-06-07
+55,Whitmore Family Clinic,Clinic,Wichita,KS,Central,2020-09-17
+56,Hartwell Care Home,Nursing Home,Erie,PA,Northeast,2023-10-30
+57,Rosewood Surgery Center,Surgery Center,Durham,NC,South,2022-12-08
+58,Cedar Ridge Pharmacy,Pharmacy,Nashville,TN,South,2017-04-12
+59,Ironwood Pharmacy,Pharmacy,Shreveport,LA,Central,2019-05-02
+60,Clearwater Pharmacy,Pharmacy,Camden,NJ,Northeast,2022-05-23
+61,Glenwood Care Home,Nursing Home,Knoxville,TN,South,2021-04-12
+62,Whitmore Care Home,Nursing Home,Durham,NC,South,2020-01-08
+63,Willow Creek Pharmacy,Pharmacy,Nashville,TN,South,2022-10-29
+64,Thornbury Family Clinic,Clinic,Savannah,GA,South,2021-07-25
+65,Lakeview Pharmacy,Pharmacy,Dayton,OH,Midwest,2020-02-10
+66,Bayview Family Clinic,Clinic,Trenton,NJ,Northeast,2020-09-01
+67,Fairhaven Care Home,Nursing Home,Nashville,TN,South,2017-04-04
+68,Foxborough Care Home,Nursing Home,Erie,PA,Northeast,2022-06-29
+69,Hartwell Family Clinic,Clinic,Lowell,MA,Northeast,2019-06-27
+70,Newbury Pharmacy,Pharmacy,Raleigh,NC,South,2023-11-01
+71,Fairhaven Surgery Center,Surgery Center,Columbus,OH,Midwest,2022-02-06
+72,Elmwood Medical Center,Hospital,Baton Rouge,LA,Central,2021-12-04
+73,Marlow Family Clinic,Clinic,Macon,GA,South,2022-06-05
+74,Marlow Pharmacy,Pharmacy,Buffalo,NY,Northeast,2021-05-11
+75,Brookside Pharmacy,Pharmacy,Madison,WI,Midwest,2021-03-31
+76,Ashford Medical Center,Hospital,Eugene,OR,West,2021-04-26
+77,Lakeview Family Clinic,Clinic,Tulsa,OK,Central,2017-05-11
+78,Highland Park Medical Center,Hospital,Columbus,OH,Midwest,2017-03-03
+79,Hartwell Medical Center,Hospital,Mobile,AL,South,2023-06-22
+80,Kingsley Family Clinic,Clinic,Mobile,AL,South,2022-11-17
+81,Prescott Pharmacy,Pharmacy,Trenton,NJ,Northeast,2022-01-19
+82,Oakridge Care Home,Nursing Home,Durham,NC,South,2021-11-10
+83,Crestview Family Clinic,Clinic,Erie,PA,Northeast,2018-03-02
+84,Upton Pharmacy,Pharmacy,Camden,NJ,Northeast,2023-07-30
+85,Lakeview Surgery Center,Surgery Center,Shreveport,LA,Central,2017-12-19
+86,Cedar Ridge Family Clinic,Clinic,Topeka,KS,Central,2020-02-13
+87,Brookside Family Clinic,Clinic,Albany,NY,Northeast,2021-08-03
+88,Northfield Pharmacy,Pharmacy,Camden,NJ,Northeast,2023-06-29
+89,Ironwood Family Clinic,Clinic,Grand Rapids,MI,Midwest,2018-05-26
+90,Oakridge Pharmacy,Pharmacy,New Haven,CT,Northeast,2022-01-17
+91,Riverside Family Clinic,Clinic,Houston,TX,Central,2019-11-18
+92,Copperfield Pharmacy,Pharmacy,Raleigh,NC,South,2019-07-02
+93,Crestview Pharmacy,Pharmacy,Tucson,AZ,West,2021-03-20
+94,Westbrook Family Clinic,Clinic,New Haven,CT,Northeast,2018-10-26
+95,Cedar Ridge Medical Center,Hospital,Springfield,IL,Midwest,2021-03-26
+96,Whitmore Pharmacy,Pharmacy,Sacramento,CA,West,2021-09-12
+97,Sheffield Care Home,Nursing Home,Knoxville,TN,South,2021-10-29
+98,Stonebridge Medical Center,Hospital,Fresno,CA,West,2018-03-07
+99,Copperfield Medical Center,Hospital,Savannah,GA,South,2018-11-12
+100,Granite Falls Pharmacy,Pharmacy,Salem,OR,West,2022-10-02
+101,Marlow Medical Center,Hospital,Green Bay,WI,Midwest,2020-09-22
+102,Granite Falls Family Clinic,Clinic,Huntsville,AL,South,2021-07-24
+103,Granite Falls Medical Center,Hospital,Dayton,OH,Midwest,2021-12-21
+104,Whitmore Medical Center,Hospital,Shreveport,LA,Central,2019-12-02
+105,Eastgate Pharmacy,Pharmacy,Knoxville,TN,South,2019-04-10
+106,Southport Care Home,Nursing Home,Savannah,GA,South,2018-10-27
+107,Lakeview Care Home,Nursing Home,Mobile,AL,South,2019-04-07
+108,Southport Pharmacy,Pharmacy,Worcester,MA,Northeast,2019-03-01
+109,Foxborough Surgery Center,Surgery Center,Austin,TX,Central,2017-03-12
+110,Foxborough Medical Center,Hospital,Huntsville,AL,South,2018-04-12
+111,Maple Grove Medical Center,Hospital,Raleigh,NC,South,2021-08-19
+112,Alder Bay Care Home,Nursing Home,Albany,NY,Northeast,2021-03-12
+113,Upton Medical Center,Hospital,Wichita,KS,Central,2022-10-09
+114,Rosewood Medical Center,Hospital,Macon,GA,South,2020-06-25
+115,Oak Hollow Medical Center,Hospital,Buffalo,NY,Northeast,2022-01-24
+116,Kensington Medical Center,Hospital,Buffalo,NY,Northeast,2019-04-15
+117,Upton Family Clinic,Clinic,Rochester,MN,Midwest,2019-06-20
+118,Kensington Care Home,Nursing Home,Worcester,MA,Northeast,2021-08-25
+119,Bellmont Pharmacy,Pharmacy,Raleigh,NC,South,2019-10-14
+120,Meadowbrook Medical Center,Hospital,Lowell,MA,Northeast,2018-01-03
+121,Ironwood Surgery Center,Surgery Center,Camden,NJ,Northeast,2023-08-01
+122,Harbor Point Family Clinic,Clinic,Grand Rapids,MI,Midwest,2020-08-25
+123,Birchwood Medical Center,Hospital,Wichita,KS,Central,2017-03-18
+124,Bayview Care Home,Nursing Home,Buffalo,NY,Northeast,2023-03-20
+125,Oakridge Medical Center,Hospital,Durham,NC,South,2023-10-26
+126,Birchwood Pharmacy,Pharmacy,Erie,PA,Northeast,2021-06-18
+127,Southport Family Clinic,Clinic,Austin,TX,Central,2023-08-25
+128,Pine Valley Pharmacy,Pharmacy,Orlando,FL,South,2017-11-29
+129,Juniper Pharmacy,Pharmacy,Green Bay,WI,Midwest,2021-01-09
+130,Ashford Care Home,Nursing Home,Raleigh,NC,South,2021-07-04
+131,Dover Plains Medical Center,Hospital,Mobile,AL,South,2021-11-02
+132,Sunset Hills Family Clinic,Clinic,Columbus,OH,Midwest,2020-12-30
+133,Crestview Medical Center,Hospital,Allentown,PA,Northeast,2017-06-20
+134,Upton Care Home,Nursing Home,Duluth,MN,Midwest,2019-11-04
+135,Westbrook Pharmacy,Pharmacy,Orlando,FL,South,2019-10-13
+136,Quincy Hill Family Clinic,Clinic,Baton Rouge,LA,Central,2018-03-20
+137,Clearwater Family Clinic,Clinic,New Haven,CT,Northeast,2023-10-26
+138,Highland Park Family Clinic,Clinic,Durham,NC,South,2022-02-25
+139,Prescott Surgery Center,Surgery Center,Huntsville,AL,South,2019-04-24
+140,Rosewood Pharmacy,Pharmacy,Lansing,MI,Midwest,2018-04-23
+141,Silver Lake Medical Center,Hospital,Durham,NC,South,2017-08-14
+142,Eastgate Care Home,Nursing Home,Camden,NJ,Northeast,2018-09-27
+143,Yorkshire Family Clinic,Clinic,Buffalo,NY,Northeast,2022-05-28
+144,Newbury Surgery Center,Surgery Center,Dayton,OH,Midwest,2020-07-04
+145,Copperfield Family Clinic,Clinic,Camden,NJ,Northeast,2019-04-24
+146,Sunset Hills Care Home,Nursing Home,Orlando,FL,South,2020-06-03
+147,Willow Creek Medical Center,Hospital,Durham,NC,South,2021-11-26
+148,Kingsley Pharmacy,Pharmacy,Hartford,CT,Northeast,2023-04-17
+149,Vale Surgery Center,Surgery Center,Lansing,MI,Midwest,2020-01-04
+150,Vale Medical Center,Hospital,Green Bay,WI,Midwest,2020-07-26

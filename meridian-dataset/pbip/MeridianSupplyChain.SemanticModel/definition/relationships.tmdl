@@ -1,0 +1,63 @@
+relationship Sales_OrderDate
+	fromColumn: Fact_Sales.OrderDate
+	toColumn: Dim_Date.Date
+
+relationship Sales_ShipDate
+	isActive: false
+	fromColumn: Fact_Sales.ShipDate
+	toColumn: Dim_Date.Date
+
+relationship Sales_Customer
+	fromColumn: Fact_Sales.CustomerKey
+	toColumn: Dim_Customer.CustomerKey
+
+relationship Sales_Product
+	fromColumn: Fact_Sales.ProductKey
+	toColumn: Dim_Product.ProductKey
+
+relationship Sales_Warehouse
+	fromColumn: Fact_Sales.WarehouseKey
+	toColumn: Dim_Warehouse.WarehouseKey
+
+relationship Sales_Carrier
+	fromColumn: Fact_Sales.CarrierKey
+	toColumn: Dim_Carrier.CarrierKey
+
+relationship Purchases_OrderDate
+	fromColumn: Fact_Purchases.OrderDate
+	toColumn: Dim_Date.Date
+
+relationship Purchases_PromisedDate
+	isActive: false
+	fromColumn: Fact_Purchases.PromisedDate
+	toColumn: Dim_Date.Date
+
+relationship Purchases_ReceivedDate
+	isActive: false
+	fromColumn: Fact_Purchases.ReceivedDate
+	toColumn: Dim_Date.Date
+
+relationship Purchases_Product
+	fromColumn: Fact_Purchases.ProductKey
+	toColumn: Dim_Product.ProductKey
+
+relationship Purchases_Warehouse
+	fromColumn: Fact_Purchases.WarehouseKey
+	toColumn: Dim_Warehouse.WarehouseKey
+
+relationship Inventory_SnapshotDate
+	fromColumn: Fact_Inventory.SnapshotDate
+	toColumn: Dim_Date.Date
+
+relationship Inventory_Product
+	fromColumn: Fact_Inventory.ProductKey
+	toColumn: Dim_Product.ProductKey
+
+relationship Inventory_Warehouse
+	fromColumn: Fact_Inventory.WarehouseKey
+	toColumn: Dim_Warehouse.WarehouseKey
+
+relationship Product_Supplier
+	fromColumn: Dim_Product.SupplierKey
+	toColumn: Dim_Supplier.SupplierKey
+

@@ -1,0 +1,6 @@
+WarehouseKey,WarehouseCode,WarehouseName,City,State,Region,CapacityUnits
+1,ATL,Atlanta DC,Atlanta,GA,South,180000
+2,DAL,Dallas DC,Dallas,TX,Central,160000
+3,CHI,Chicago DC,Chicago,IL,Midwest,170000
+4,EWR,Newark DC,Newark,NJ,Northeast,200000
+5,RNO,Reno DC,Reno,NV,West,150000
