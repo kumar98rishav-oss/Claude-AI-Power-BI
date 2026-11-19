@@ -9,7 +9,7 @@
 
 ## Participant setup (before the next hands-on session)
 
-- [ ] Send [SETUP_GUIDE.md](SETUP_GUIDE.md) (or the [PDF](Setup_Guide_Claude_and_PowerBI_MCP_in_VSCode.pdf)) to the TA so the participants' IT team can install everything (Part A).
+- [ ] Send [SETUP_GUIDE.md](SETUP_GUIDE.md) to HR/TA: the [IT team PDF](Setup_Guide_Part_A_IT_Team.pdf) for IT, the [participant PDF](Setup_Guide_Part_B_Participants.pdf) for each participant.
 - [ ] Collect each participant's screenshot plus `claude doctor` and `claude mcp list` output (Part B, Step 9).
 
 ## Session 02: The model as files (PBIP and TMDL)
