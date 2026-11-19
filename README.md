@@ -11,6 +11,7 @@ Everything for the **Programmers.io "Claude + Power BI"** training programme: de
 | Session 01 transcript (live, editable) | https://claude.ai/artifact/KahHMqz8xB9U8MsqiuT3rM |
 | Session 01 transcript (in this repo) | [session-01/Session01_Tuesday_Transcript.md](session-01/Session01_Tuesday_Transcript.md) · [PDF](session-01/Session01_Tuesday_Transcript.pdf) |
 | Session 01 deck (20 slides) | [PPTX](session-01/Session01_Connecting_Claude_to_Power_BI.pptx) · [PDF](session-01/Session01_Connecting_Claude_to_Power_BI.pdf) |
+| **Setup guide for participants and their IT team** (prerequisites, install, sign-in, MCP connection) | [docs/SETUP_GUIDE.md](docs/SETUP_GUIDE.md) · [PDF](docs/Setup_Guide_Claude_and_PowerBI_MCP_in_VSCode.pdf) |
 | What we decided and learned while building it | [docs/CHAT_NOTES.md](docs/CHAT_NOTES.md) |
 | What's next | [docs/NEXT_STEPS.md](docs/NEXT_STEPS.md) |
 
@@ -39,6 +40,7 @@ pbip-project/                                           Meridian saved as PBIP (
 meridian-dataset/                                       the Meridian Medical Supply dataset used in every session
   MeridianSupplyChain.pbix, data/ (CSVs), sql/, docs/, data_quality_lab/, generator scripts
 docs/
+  SETUP_GUIDE.md / Setup_Guide_...pdf                  prerequisites + step-by-step setup (IT team and participants)
   CHAT_NOTES.md                                         decisions, commands and Q&A from the build sessions
   NEXT_STEPS.md                                         to-do list and the Session 2 plan
 CLAUDE.md                                               context Claude reads when you open this repo

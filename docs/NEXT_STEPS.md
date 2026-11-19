@@ -7,6 +7,11 @@
 - [ ] One full run-through with a stopwatch, including `/report-snapshot` in a fresh Claude session.
 - [ ] Send the participant prep message (in the transcript, "Message to send everyone the day before").
 
+## Participant setup (before the next hands-on session)
+
+- [ ] Send [SETUP_GUIDE.md](SETUP_GUIDE.md) (or the [PDF](Setup_Guide_Claude_and_PowerBI_MCP_in_VSCode.pdf)) to the TA so the participants' IT team can install everything (Part A).
+- [ ] Collect each participant's screenshot plus `claude doctor` and `claude mcp list` output (Part B, Step 9).
+
 ## Session 02: The model as files (PBIP and TMDL)
 
 Approved plan:
