@@ -1,0 +1,575 @@
+<title>Meridian in the Service</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Archivo:wght@600;700;800&display=swap">
+<style>
+/* Layout: sticky run-of-show rail on the left, one long guide on the right; every part = Goal / You need / Steps (with coach lines) / Check / If it fails */
+:root{
+  --bg:#f6f7f4; --surface:#ffffff; --ink:#17201c; --muted:#5b6862; --line:#dbe1dc;
+  --accent:#0f6b58; --accent-soft:#e2f1ec; --amber:#b45f06; --amber-soft:#fbf0e1;
+  --violet:#5a3fc0; --violet-soft:#eeeafb; --code-bg:#121815; --code-ink:#e6efe9; --code-dim:#8fa59a;
+  --bad:#b42318; --bad-soft:#fdecea;
+  --f-display:"Archivo","Segoe UI",system-ui,sans-serif; --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif; --f-mono:"IBM Plex Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1412; --surface:#161d1a; --ink:#e4ece7; --muted:#9aaba3; --line:#2a3631;
+  --accent:#4cc3a3; --accent-soft:#16302a; --amber:#f0a54a; --amber-soft:#33261a;
+  --violet:#a998f2; --violet-soft:#231f3a; --code-bg:#0a0e0c; --code-ink:#e6efe9; --code-dim:#7d958a;
+  --bad:#f28b82; --bad-soft:#3a1d1b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1412; --surface:#161d1a; --ink:#e4ece7; --muted:#9aaba3; --line:#2a3631;
+  --accent:#4cc3a3; --accent-soft:#16302a; --amber:#f0a54a; --amber-soft:#33261a;
+  --violet:#a998f2; --violet-soft:#231f3a; --code-bg:#0a0e0c; --code-ink:#e6efe9; --code-dim:#7d958a;
+  --bad:#f28b82; --bad-soft:#3a1d1b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-body);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+header.top{padding-block:40px 28px;border-bottom:1px solid var(--line);margin-bottom:28px}
+.eyebrow{font:600 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font:800 clamp(30px,5vw,48px)/1.05 var(--f-display);margin:12px 0 12px;text-wrap:balance;letter-spacing:-.01em}
+.lede{font-size:18px;color:var(--muted);max-width:68ch;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{font:500 12.5px/1 var(--f-mono);padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:40px;align-items:start}
+nav.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);font-size:14px}
+nav.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+nav.rail a{display:grid;grid-template-columns:44px 1fr;gap:8px;padding:7px 10px;border-radius:8px;color:var(--ink);text-decoration:none}
+nav.rail a:hover,nav.rail a:focus-visible{background:var(--accent-soft);outline:none}
+nav.rail .t{font:500 12px/1.6 var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+nav.rail .navlabel{font:600 11px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:18px 10px 8px}
+main{min-width:0}
+section.part{padding-block:8px 36px;border-bottom:1px solid var(--line);margin-bottom:32px;scroll-margin-top:16px}
+section.part:last-of-type{border-bottom:0}
+.parthead{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 14px;margin-bottom:6px}
+h2{font:700 clamp(22px,3vw,30px)/1.15 var(--f-display);margin:0;text-wrap:balance}
+.time{font:500 13px/1 var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.who{font:600 11.5px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:6px 9px;border-radius:6px}
+.who.all{background:var(--accent-soft);color:var(--accent)}
+.who.trainer{background:var(--amber-soft);color:var(--amber)}
+.who.trackA{background:var(--violet-soft);color:var(--violet)}
+h3{font:700 15px/1.3 var(--f-display);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:26px 0 10px}
+p{margin:0 0 12px;max-width:72ch}
+.goal{font-size:17.5px;max-width:70ch}
+ul.need{margin:0;padding-left:20px;display:grid;gap:4px}
+ol.steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:18px}
+ol.steps>li{counter-increment:s;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px}
+ol.steps>li::before{content:counter(s);font:700 14px/34px var(--f-display);text-align:center;width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--bg)}
+ol.steps>li>div{min-width:0}
+.do{font-weight:600}
+.coach{border-left:3px solid var(--amber);background:var(--amber-soft);padding:8px 12px;border-radius:0 8px 8px 0;margin:8px 0;font-size:15px}
+.coach b{font:600 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.check{border:1px solid var(--accent);background:var(--accent-soft);border-radius:10px;padding:12px 14px;margin-top:20px}
+.check b,.fail b{font:600 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:6px}
+.check b{color:var(--accent)}
+.fail{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 14px;margin-top:12px}
+.fail b{color:var(--bad)}
+.note{font-size:14.5px;color:var(--muted)}
+.warn{border:1px solid var(--bad);background:var(--bad-soft);border-radius:10px;padding:12px 14px;margin:14px 0}
+.warn b{color:var(--bad)}
+.code{position:relative;margin:8px 0}
+.code pre{background:var(--code-bg);color:var(--code-ink);font:13.5px/1.55 var(--f-mono);padding:12px 14px;border-radius:9px;overflow-x:auto;margin:0;white-space:pre}
+.code .lab{position:absolute;top:0;left:12px;transform:translateY(-55%);font:600 10.5px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;background:var(--surface);color:var(--muted);border:1px solid var(--line);padding:4px 7px;border-radius:5px}
+.code button{position:absolute;top:7px;right:7px;font:500 12px/1 var(--f-mono);padding:6px 9px;border-radius:6px;border:1px solid #3a4a43;background:#1e2824;color:#cfe0d7;cursor:pointer}
+.code button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code.i{font:13.5px var(--f-mono);background:var(--accent-soft);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+.tbl{overflow-x:auto;margin:10px 0;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font:600 12px/1.3 var(--f-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono);white-space:nowrap}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0 4px;font:500 13px/1.3 var(--f-mono)}
+.flow span{border:1px solid var(--line);background:var(--surface);padding:8px 10px;border-radius:8px}
+.flow i{font-style:normal;color:var(--muted)}
+details{border:1px solid var(--line);border-radius:10px;background:var(--surface);margin:10px 0}
+summary{cursor:pointer;padding:12px 14px;font-weight:600}
+details>div{padding:0 14px 12px}
+.err pre{background:var(--bad-soft);color:var(--ink);border:1px solid var(--bad);white-space:pre-wrap;word-break:break-word}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:10px 0}
+.card{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:14px}
+.card h4{font:700 16px/1.3 var(--f-display);margin:0 0 6px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+footer{color:var(--muted);font-size:13.5px;border-top:1px solid var(--line);padding-top:16px;margin-top:20px}
+@media (max-width:900px){.layout{grid-template-columns:1fr}nav.rail{position:static}nav.rail ol{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Claude + Power BI · Session 02 · trainer's guide</div>
+  <h1>Meridian in the Service: paginated reports and Skills that run themselves</h1>
+  <p class="lede">We take the Meridian report from your laptop to the Power BI service, let Claude read the published model, build a paginated report with Claude's help, and turn the checks into Skills that run on a schedule. You share a participant's screen and coach them through each step; they do the clicking.</p>
+  <div class="meta">
+    <span class="chip">90 min (60-min cut in the run of show)</span>
+    <span class="chip">VS Code + Claude Code</span>
+    <span class="chip">Read-only first</span>
+    <span class="chip">Sample data only</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="rail" aria-label="Run of show">
+  <div class="navlabel">Run of show</div>
+  <ol>
+    <li><a href="#before"><span class="t">prep</span><span>Before the session</span></a></li>
+    <li><a href="#p0"><span class="t">0:00</span><span>Goal and tracks</span></a></li>
+    <li><a href="#p1"><span class="t">0:08</span><span>Publish to the Service</span></a></li>
+    <li><a href="#p2"><span class="t">0:18</span><span>Claude reads the published model</span></a></li>
+    <li><a href="#p3"><span class="t">0:30</span><span>Gateway and refresh</span></a></li>
+    <li><a href="#p4"><span class="t">0:40</span><span>Paginated report with Claude</span></a></li>
+    <li><a href="#p5"><span class="t">1:00</span><span>Create Skills with skill-creator</span></a></li>
+    <li><a href="#p6"><span class="t">1:15</span><span>Run Skills automatically</span></a></li>
+    <li><a href="#p7"><span class="t">1:25</span><span>Wrap-up</span></a></li>
+  </ol>
+  <div class="navlabel">Reference</div>
+  <ol>
+    <li><a href="#files"><span class="t">files</span><span>Skill files to copy</span></a></li>
+    <li><a href="#licences"><span class="t">rules</span><span>Licences and safety</span></a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- BEFORE -->
+<section class="part" id="before">
+  <div class="parthead"><h2>Before the session</h2><span class="who trainer">Trainer + IT</span></div>
+  <p class="goal">Do this the day before. Everything Session 01 needed must already work (the setup guide's final checklist), plus the items below.</p>
+  <h3>Everyone needs</h3>
+  <ul class="need">
+    <li>Session 01 working: <code class="i">claude mcp list</code> shows <code class="i">powerbi-modeling</code> as Connected.</li>
+    <li><b>Power BI Report Builder</b> (free): <code class="i">winget install --id Microsoft.PowerBIReportBuilder -e</code></li>
+    <li>The Power BI PowerShell module, once per user: <code class="i">Install-Module MicrosoftPowerBIMgmt -Scope CurrentUser</code></li>
+    <li>A Power BI sign-in with a <b>work or school</b> account.</li>
+    <li>The <code class="i">1st Session</code> PBIP folder (in the repo: <code class="i">pbip-project/</code>) open in VS Code.</li>
+  </ul>
+  <h3>Decide each person's track</h3>
+  <div class="two">
+    <div class="card"><h4>Track A: Service workspace</h4><p class="note" style="margin:0">Has a workspace on Premium, Premium Per User or Fabric capacity (the free 60-day Fabric trial counts). Does every part hands-on.</p></div>
+    <div class="card"><h4>Track B: Free account</h4><p class="note" style="margin:0">Only My workspace. Publishes and builds the paginated report, but watches parts 2 and 3 on your screen. Everything else runs against Power BI Desktop.</p></div>
+  </div>
+  <p class="note">Why the split: Claude reaches a published model through the XMLA endpoint, and Microsoft supports that only on Premium, PPU or Fabric capacity workspaces. A My workspace is supported only if it's on one of those.</p>
+  <h3>Trainer only</h3>
+  <ul class="need">
+    <li>Your own <code class="i">Data Analysis_dev</code> workspace with Meridian published and Claude connected once (you did this already).</li>
+    <li>An on-premises data gateway in <b>personal mode</b> installed and signed in (part 3 shows it), or a standard gateway from IT.</li>
+    <li>Copy the three Skills from <a href="#files">Skill files</a> into your project's <code class="i">.claude/skills/</code> folder, fill in the workspace and model IDs, and run each once.</li>
+    <li>Turn off the <code class="i">powerbi-authoring</code> plugin so the only Power BI server is the read-only one: <code class="i">claude plugin disable powerbi-authoring@fabric-collection</code></li>
+  </ul>
+</section>
+
+<!-- PART 0 -->
+<section class="part" id="p0">
+  <div class="parthead"><span class="time">0:00–0:08</span><h2>Goal and tracks</h2><span class="who all">Everyone</span></div>
+  <p class="goal">Everyone knows where today goes and which track they're on.</p>
+  <div class="flow"><span>Power BI Desktop</span><i>→ publish →</i><span>Power BI service</span><i>→ XMLA →</i><span>Claude (MCP, read-only)</span><i>→</i><span>Skills</span><i>→ schedule →</i><span>runs without you</span></div>
+  <div class="coach"><b>Say</b>"Last week Claude read the report on your laptop. Today the report goes to the Power BI service, Claude reads the published copy, we build a paginated report together, and we save our checks as Skills that run on a schedule. If your account is the free one, you'll still do most of it; for two parts you'll watch my screen."</div>
+  <div class="coach"><b>Ask</b>"Who has a workspace that isn't My workspace? Who started the Fabric trial?" Note who is Track A.</div>
+</section>
+
+<!-- PART 1 -->
+<section class="part" id="p1">
+  <div class="parthead"><span class="time">0:08–0:18</span><h2>Publish Meridian to the Service</h2><span class="who all">Everyone</span></div>
+  <p class="goal">The Meridian report and its semantic model are in a workspace, and you know the workspace ID and model ID.</p>
+  <h3>You need</h3>
+  <ul class="need"><li>Meridian open in Power BI Desktop (the .pbix or the .pbip).</li><li>Signed in to Power BI Desktop (top right corner).</li></ul>
+  <h3>Steps</h3>
+  <ol class="steps">
+    <li><div><p class="do">In Power BI Desktop: Home › Publish.</p>
+      <div class="coach"><b>Coach</b>"Click Publish on the Home ribbon. Save first if it asks."</div></div></li>
+    <li><div><p class="do">Pick the workspace.</p><p>Track A: your capacity workspace (for example <code class="i">Data Analysis_dev</code>). Track B: My workspace.</p></div></li>
+    <li><div><p class="do">Open the published report, then the semantic model's settings, and copy the two IDs from the address bar.</p>
+      <div class="code"><span class="lab">URL pattern</span><pre>https://app.powerbi.com/groups/<b>&lt;workspace-id&gt;</b>/datasets/<b>&lt;model-id&gt;</b>/details</pre></div>
+      <div class="coach"><b>Coach</b>"Open the workspace, find MeridianSupplyChain with the semantic model icon, open it. Now look at the address bar: the long code after groups is the workspace ID, the one after datasets is the model ID. Paste both into Notepad."</div></div></li>
+  </ol>
+  <div class="check"><b>Check</b>The report opens in the browser with the same numbers as Desktop (2025 revenue 14.1M), and both IDs are saved in Notepad.</div>
+  <div class="fail"><b>If it fails</b>"You don't have permission to publish to this workspace": they need Contributor or higher in that workspace, or use My workspace. Publish greyed out: sign in to Power BI Desktop first.</div>
+</section>
+
+<!-- PART 2 -->
+<section class="part" id="p2">
+  <div class="parthead"><span class="time">0:18–0:30</span><h2>Claude reads the published model</h2><span class="who trackA">Track A hands-on · Track B watches</span></div>
+  <p class="goal">Claude connects to the model in the Service, read-only, and compares it with the Desktop copy.</p>
+  <h3>You need</h3>
+  <ul class="need"><li>Track A workspace (Premium, PPU or Fabric capacity) and <b>Write</b> permission on the model.</li><li>A <b>new</b> Claude session in VS Code with only the read-only <code class="i">powerbi-modeling</code> server.</li></ul>
+  <h3>Steps</h3>
+  <ol class="steps">
+    <li><div><p class="do">Start a new Claude session in the project folder and check the server.</p>
+      <div class="code"><span class="lab">Terminal</span><button type="button">Copy</button><pre>claude</pre></div>
+      <div class="code"><span class="lab">In Claude</span><button type="button">Copy</button><pre>/mcp</pre></div>
+      <div class="coach"><b>Coach</b>"Type /mcp. You should see powerbi-modeling and nothing else that says Power BI. If you see a plugin called powerbi-authoring, tell me." (That one can write. Disable it with the command in Before the session.)</div></div></li>
+    <li><div><p class="do">Connect to the published model.</p>
+      <div class="code"><span class="lab">In Claude</span><button type="button">Copy</button><pre>Connect to semantic model 'MeridianSupplyChain' in Fabric Workspace 'Data Analysis_dev'</pre></div>
+      <p>A browser window asks you to sign in with your Microsoft account. Approve each tool call after reading it.</p>
+      <div class="coach"><b>Coach</b>"Read the approval box out loud before you click Yes. It should say connection operations. That's a read."</div></div></li>
+    <li><div><p class="do">Ask what Claude can see, then compare with Desktop.</p>
+      <div class="code"><span class="lab">In Claude</span><button type="button">Copy</button><pre>Compare the published MeridianSupplyChain model with the copy open in Power BI Desktop: number of tables, measures and relationships, any measure whose DAX differs, and the last refresh time of each. Read only, change nothing.</pre></div>
+      <div class="coach"><b>Say</b>"This is the first real use of the Service connection: catching drift between what's on your laptop and what users actually see."</div></div></li>
+  </ol>
+  <div class="warn"><b>Rule for today: no writes to the published model.</b> Microsoft: "a write operation on a semantic model authored in Power BI Desktop prevents it from being downloaded back as a PBIX file." Keep the Desktop or PBIP copy as the source of truth and change that, then republish.</div>
+  <div class="check"><b>Check</b>Claude says it's connected to MeridianSupplyChain in your workspace, and the comparison shows 10 tables, 30 measures and 15 relationships on both sides (unless someone changed one).</div>
+  <div class="fail"><b>If it fails</b>"XMLA endpoint" or "not supported" errors: the workspace isn't on Premium, PPU or Fabric capacity, so switch them to Track B. Sign-in loops: check the account is the same one that owns the workspace. Claude offers to change the model: it's using a read-write server, so stop and check <code class="i">/mcp</code>.</div>
+</section>
+
+<!-- PART 3 -->
+<section class="part" id="p3">
+  <div class="parthead"><span class="time">0:30–0:40</span><h2>Gateway and refresh</h2><span class="who trainer">Trainer demo</span></div>
+  <p class="goal">Everyone understands why the Service needs a gateway for Meridian, and sees Claude read the refresh history.</p>
+  <p>Meridian reads CSV files from a folder on your laptop. The Service can't reach your C: drive, so a scheduled refresh in the Service fails until a gateway connects them.</p>
+  <div class="two">
+    <div class="card"><h4>Personal mode gateway</h4><p class="note" style="margin:0">You install it yourself. One per user, Power BI only, Import models only. Refresh works only while your laptop is on. Fine for training.</p></div>
+    <div class="card"><h4>Standard gateway</h4><p class="note" style="margin:0">Installed by IT on an always-on server, shared by many people. What production uses, and what we'll point at SQL Server in a later session.</p></div>
+  </div>
+  <h3>Steps (on your screen)</h3>
+  <ol class="steps">
+    <li><div><p class="do">Show the gateway in the Service: semantic model › Settings › Gateway and cloud connections. Map the CSV data source to the gateway, enter its credentials, and turn on scheduled refresh (for example daily, 07:00).</p>
+      <div class="coach"><b>Say</b>"The daily refresh belongs to Power BI, not to Claude. It's free and reliable. Claude's job is to check that it worked."</div></div></li>
+    <li><div><p class="do">Ask Claude to read the refresh history through the service-check script.</p>
+      <div class="code"><span class="lab">In Claude</span><button type="button">Copy</button><pre>Run .claude/skills/service-check/scripts/service_check.ps1 with my workspace ID and model ID, and tell me if the last refresh worked and whether the data source goes through a gateway.</pre></div>
+      <p class="note">The script signs you in to Power BI in the browser the first time, then reads the refresh history and data sources through the Power BI REST API. It changes nothing. Reading refresh history needs Write permission on the model.</p></div></li>
+    <li><div><p class="do">Optional: start a refresh on purpose with the <code class="i">/refresh-now</code> Skill (it asks before doing anything), then run the check again.</p></div></li>
+  </ol>
+  <div class="check"><b>Check</b>The history shows your scheduled or on-demand refresh as Completed, and the data source shows a gateway.</div>
+  <div class="fail"><b>If it fails</b>A failed refresh with a gateway or credentials error: the gateway is offline (is the laptop on?) or the data source credentials aren't set. On shared capacity the API allows about 8 refresh requests a day.</div>
+</section>
+
+<!-- PART 4 -->
+<section class="part" id="p4">
+  <div class="parthead"><span class="time">0:40–1:00</span><h2>Paginated report with Claude</h2><span class="who all">Everyone</span></div>
+  <p class="goal">Build a printable Supplier Scorecard: Report Builder makes the connection, Claude edits the layout in the .rdl file, Report Builder checks it.</p>
+  <h3>What Claude can and can't do here</h3>
+  <div class="tbl"><table><thead><tr><th>Task</th><th>Who does it</th></tr></thead><tbody>
+    <tr><td>Connect to the semantic model, create the dataset</td><td>You, in Report Builder (Power BI Semantic Model Connection, DAX query)</td></tr>
+    <tr><td>Edit the layout: table, formatting, header, footer, parameters</td><td>Claude, by editing the .rdl file (it's XML text)</td></tr>
+    <tr><td>Check the file is valid</td><td>Report Builder, by opening it</td></tr>
+    <tr><td>Render, export to PDF, publish</td><td>You, in Report Builder or the Service</td></tr>
+  </tbody></table></div>
+  <h3>Steps</h3>
+  <ol class="steps">
+    <li><div><p class="do">Get the DAX for the supplier table from Desktop.</p><p>In Power BI Desktop: Optimize › Performance analyzer › Start recording › Refresh visuals. Expand the Supplier scorecard visual and click <b>Copy query</b>.</p>
+      <div class="coach"><b>Coach</b>"Find the line called Supplier scorecard, expand it, and click Copy query. That's the DAX Power BI runs for that table."</div></div></li>
+    <li><div><p class="do">Create the report in Report Builder and save it in the project.</p>
+      <p>Report Builder › sign in › Report Data › New › <b>Power BI Semantic Model Connection</b> › pick MeridianSupplyChain. Right-click the data source › Add Dataset › Query Designer with <b>DAX</b> selected and Design Mode off › paste the query, delete any <code class="i">TOPN</code>, Execute Query › OK. Insert › Table › Table Wizard › drag all fields in. Save as <code class="i">reports\Supplier_Scorecard.rdl</code> in the project folder.</p>
+      <div class="coach"><b>Coach</b>"The Table Wizard gives you a plain table. Don't style it; that's Claude's job. Just save it into the reports folder."</div></div></li>
+    <li><div><p class="do">Ask Claude to style it with the paginated-report Skill.</p>
+      <div class="code"><span class="lab">In Claude</span><button type="button">Copy</button><pre>/paginated-report In reports/Supplier_Scorecard.rdl: add a title "Meridian Supplier Scorecard" and a page footer with the page number, make the header row bold with a dark background and white text, add a thin grey border to every cell, format the on-time % column as 0.0%, and set the page to A4 landscape.</pre></div>
+      <div class="coach"><b>Say</b>"Claude edits the file; it can't show us the result. So we always reopen it in Report Builder. That's our check."</div></div></li>
+    <li><div><p class="do">Reopen the file in Report Builder and click Run.</p>
+      <p>If it opens, you're done. If you get a "Deserialization failed" error, copy the whole message and paste it into Claude.</p>
+      <div class="err code"><span class="lab">Real error from our test run</span><pre>Deserialization failed: The element 'Style' in namespace 'http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition' has invalid child element 'BorderStyle' ... List of possible elements expected: 'Border, TopBorder, BottomBorder, LeftBorder, RightBorder, BackgroundColor, ... PaddingBottom, ...' Line 150, position 370.</pre></div>
+      <div class="coach"><b>Say</b>"This is the error we hit when we tested this. Read it: it tells you the bad element (BorderStyle), where (line 150), and the list of elements that are allowed. Borders are written with a Border element. Claude fixes it in seconds when you paste the message, and the paginated-report Skill now has that rule written in, so it shouldn't happen again."</div>
+      <div class="code"><span class="lab">Wrong vs right</span><button type="button">Copy</button><pre>&lt;!-- wrong: Report Builder rejects it --&gt;
+&lt;Style&gt;&lt;BorderStyle&gt;Solid&lt;/BorderStyle&gt;&lt;/Style&gt;
+
+&lt;!-- right: a Border element inside Style --&gt;
+&lt;Style&gt;
+  &lt;Border&gt;
+    &lt;Color&gt;#cfd4da&lt;/Color&gt;
+    &lt;Style&gt;Solid&lt;/Style&gt;
+    &lt;Width&gt;1pt&lt;/Width&gt;
+  &lt;/Border&gt;
+&lt;/Style&gt;</pre></div></div></li>
+    <li><div><p class="do">Publish from Report Builder: File › Publish › Power BI service › pick the workspace.</p>
+      <p class="note">My workspace: no Pro licence needed. Any other workspace: Pro or PPU. Viewers need Pro or PPU unless the workspace is on F64/P1 or larger.</p></div></li>
+  </ol>
+  <div class="check"><b>Check</b>The report runs in Report Builder with a bold dark header, borders and 0.0% formatting, and opens in the Service from your workspace.</div>
+  <div class="fail"><b>If it fails</b>No Power BI Semantic Model Connection option: sign in to Report Builder first (top right). The DAX query errors: remove the TOPN and any <code class="i">__DS0</code> variables you don't need, or ask Claude to simplify the copied query. Report Builder rejects the file: paste the error into Claude; restore <code class="i">Supplier_Scorecard.backup.rdl</code> if needed.</div>
+</section>
+
+<!-- PART 5 -->
+<section class="part" id="p5">
+  <div class="parthead"><span class="time">1:00–1:15</span><h2>Create Skills with skill-creator</h2><span class="who all">Everyone</span></div>
+  <p class="goal">Install Anthropic's skill-creator, use it to write a Skill, save it in the project and run it.</p>
+  <h3>Where Skills live</h3>
+  <div class="tbl"><table><thead><tr><th>Kind</th><th>Folder</th><th>Who gets it</th></tr></thead><tbody>
+    <tr><td>Project Skill</td><td><code class="i">.claude/skills/&lt;name&gt;/SKILL.md</code></td><td>Everyone who opens the project (shared through Git)</td></tr>
+    <tr><td>Personal Skill</td><td><code class="i">%USERPROFILE%\.claude\skills\&lt;name&gt;\SKILL.md</code></td><td>Only you, in every project</td></tr>
+  </tbody></table></div>
+  <p class="note">Claude Code watches these folders and picks up a new or changed Skill without a restart. If one doesn't appear, run <code class="i">/reload-skills</code>.</p>
+  <h3>Steps</h3>
+  <ol class="steps">
+    <li><div><p class="do">Install skill-creator (one time). It isn't built in; it comes from Anthropic's skills marketplace.</p>
+      <div class="code"><span class="lab">In Claude (terminal session)</span><button type="button">Copy</button><pre>/plugin marketplace add anthropics/skills
+/plugin install example-skills@anthropic-agent-skills</pre></div>
+      <p class="note">Same thing from a normal terminal: <code class="i">claude plugin marketplace add anthropics/skills</code> then <code class="i">claude plugin install example-skills@anthropic-agent-skills</code>.</p>
+      <div class="coach"><b>Coach</b>"Type the first line, Enter, wait for it to finish, then the second line. It may ask where to install; pick user so it works in every project."</div></div></li>
+    <li><div><p class="do">Find its exact name: type <code class="i">/skill</code> and look at the suggestions.</p>
+      <p>Plugin Skills are named <code class="i">/plugin-name:skill-name</code>, so expect <code class="i">/example-skills:skill-creator</code>. (On the trainer's machine it's <code class="i">/anthropic-skills:skill-creator</code>, from a different plugin.) Use whichever the list shows.</p></div></li>
+    <li><div><p class="do">Ask skill-creator to build the service-check Skill.</p>
+      <div class="code"><span class="lab">In Claude</span><button type="button">Copy</button><pre>/example-skills:skill-creator Create a project skill called service-check in .claude/skills/service-check. It must be read-only. It connects with the powerbi-modeling MCP server to semantic model 'MeridianSupplyChain' in Fabric Workspace 'Data Analysis_dev', reads the last refresh time with INFO.PARTITIONS, runs scripts/service_check.ps1 (which I'll provide) for refresh history and gateway status, runs the KPI query from the report-snapshot skill with its thresholds, and ends with a Flags list. Keep SKILL.md short.</pre></div>
+      <div class="coach"><b>Say</b>"skill-creator asks you questions and writes the folder for you. Read what it writes before you accept it, the same way you read every approval."</div>
+      <p class="note">Short on time or skill-creator not installed? Copy the ready-made Skill from <a href="#files">Skill files</a> into <code class="i">.claude/skills/service-check/</code>. It's the same thing.</p></div></li>
+    <li><div><p class="do">Run it, then save it to Git.</p>
+      <div class="code"><span class="lab">In Claude</span><button type="button">Copy</button><pre>/service-check</pre></div>
+      <div class="code"><span class="lab">Terminal</span><button type="button">Copy</button><pre>git add .claude/skills/service-check
+git commit -m "Add service-check skill"</pre></div></div></li>
+    <li><div><p class="do">Look at the three Skills side by side and point out the differences.</p>
+      <div class="tbl"><table><thead><tr><th>Skill</th><th>Changes anything?</th><th>Claude may start it by itself?</th></tr></thead><tbody>
+        <tr><td><code class="i">service-check</code></td><td>No</td><td>Yes, when you ask "is the published report OK?"</td></tr>
+        <tr><td><code class="i">paginated-report</code></td><td>Only the .rdl file, after a backup</td><td>Yes</td></tr>
+        <tr><td><code class="i">refresh-now</code></td><td>Yes, starts a refresh</td><td><b>No</b>: <code class="i">disable-model-invocation: true</code> means only typing <code class="i">/refresh-now</code> runs it</td></tr>
+      </tbody></table></div></div></li>
+  </ol>
+  <div class="check"><b>Check</b><code class="i">/service-check</code> prints the four headings and a Flags list, and <code class="i">git log</code> shows the commit.</div>
+  <div class="fail"><b>If it fails</b><code class="i">/plugin</code> isn't recognised: they're in the VS Code chat panel; run the two <code class="i">claude plugin</code> commands in the terminal instead. The Skill doesn't show up: check the path is <code class="i">.claude/skills/service-check/SKILL.md</code> and run <code class="i">/reload-skills</code>. The script won't run: <code class="i">Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>.</div>
+</section>
+
+<!-- PART 6 -->
+<section class="part" id="p6">
+  <div class="parthead"><span class="time">1:15–1:25</span><h2>Run Skills automatically</h2><span class="who all">Everyone (option 3 is homework)</span></div>
+  <p class="goal">Know the four ways to run a Skill on a timer and which one fits a Power BI check.</p>
+  <div class="tbl"><table><thead><tr><th>Option</th><th>Where it runs</th><th>Good for</th><th>Catch</th></tr></thead><tbody>
+    <tr><td><b>1. <code class="i">/loop</code></b></td><td>Your open Claude session</td><td>A quick demo, watching something for an hour</td><td>Only while the session is open and idle; recurring loops expire after 7 days</td></tr>
+    <tr><td><b>2. Claude Desktop scheduled task</b></td><td>Your laptop, from the Claude Desktop app</td><td>A daily check without writing scripts</td><td>Only while the app is open and the laptop is awake</td></tr>
+    <tr><td><b>3. Windows Task Scheduler + <code class="i">claude -p</code></b></td><td>Your laptop, from Windows</td><td>A dependable morning run that writes a log</td><td>A standard Windows feature, not an Anthropic recipe: test it once by hand</td></tr>
+    <tr><td><b>4. Cloud schedule (<code class="i">/schedule</code>)</b></td><td>Anthropic's cloud, on a fresh copy of your Git repo</td><td>Work that only needs the repo</td><td><b>Not for this:</b> it can't see your laptop, Power BI Desktop or your files</td></tr>
+  </tbody></table></div>
+  <h3>Steps</h3>
+  <ol class="steps">
+    <li><div><p class="do">Option 1, live: run the snapshot every 30 minutes in this session.</p>
+      <div class="code"><span class="lab">In Claude</span><button type="button">Copy</button><pre>/loop 30m /report-snapshot</pre></div>
+      <p>Stop it by saying "cancel the report-snapshot loop".</p></div></li>
+    <li><div><p class="do">Option 3: run a Skill without anyone at the keyboard.</p>
+      <p><code class="i">claude -p</code> runs one prompt and exits. A <code class="i">/skill-name</code> in the prompt runs that Skill. <code class="i">--allowedTools</code> lists what it may use without asking, because there's nobody to click Yes.</p>
+      <div class="code"><span class="lab">Terminal: try it by hand first</span><button type="button">Copy</button><pre>claude -p "/report-snapshot" --allowedTools "mcp__powerbi-modeling__*" "Bash(python *)" --max-turns 30</pre></div>
+      <p>Save this as <code class="i">run-snapshot.cmd</code> in the project folder (next to the .pbip):</p>
+      <div class="code"><span class="lab">run-snapshot.cmd</span><button type="button">Copy</button><pre>@echo off
+rem Runs the report-snapshot Skill with nobody at the keyboard and appends the result to logs\snapshot.log.
+rem Put this file in the project folder (next to the .pbip). Power BI Desktop must be open with the report.
+cd /d "%~dp0"
+if not exist logs mkdir logs
+echo ===== %DATE% %TIME% ===== &gt;&gt; logs\snapshot.log
+claude -p "/report-snapshot" --allowedTools "mcp__powerbi-modeling__*" "Bash(python *)" --max-turns 30 &gt;&gt; logs\snapshot.log 2&gt;&amp;1</pre></div>
+      <p>Schedule it for 09:00 on weekdays (change the path to your project folder):</p>
+      <div class="code"><span class="lab">Terminal (CMD or PowerShell)</span><button type="button">Copy</button><pre>schtasks /Create /TN "Meridian report snapshot" /SC WEEKLY /D MON,TUE,WED,THU,FRI /ST 09:00 /TR "C:\Training\pbip-project\run-snapshot.cmd"</pre></div>
+      <div class="code"><span class="lab">Test it now, then read the log</span><button type="button">Copy</button><pre>schtasks /Run /TN "Meridian report snapshot"
+type logs\snapshot.log</pre></div>
+      <div class="code"><span class="lab">Remove it later</span><button type="button">Copy</button><pre>schtasks /Delete /TN "Meridian report snapshot" /F</pre></div></div></li>
+  </ol>
+  <div class="warn"><b>Only schedule read-only Skills.</b> A scheduled run approves its own tool calls, so never schedule <code class="i">refresh-now</code> or anything that writes. For the published model, a scheduled <code class="i">service-check</code> needs a sign-in that's still valid: if it asks you to sign in every morning, unattended runs need a service principal from IT. That's outside this course, so schedule <code class="i">report-snapshot</code> against Power BI Desktop today.</div>
+  <div class="check"><b>Check</b><code class="i">logs\snapshot.log</code> has a dated entry with the five report-snapshot headings.</div>
+  <div class="fail"><b>If it fails</b>The log says a tool was denied: add it to <code class="i">--allowedTools</code> (MCP tools are named <code class="i">mcp__powerbi-modeling__...</code>). "No Power BI Desktop instance found": Desktop has to be open with the report when the task runs. Nothing in the log: check the path in <code class="i">/TR</code> and that <code class="i">claude</code> works in a new terminal.</div>
+</section>
+
+<!-- PART 7 -->
+<section class="part" id="p7">
+  <div class="parthead"><span class="time">1:25–1:30</span><h2>Wrap-up</h2><span class="who all">Everyone</span></div>
+  <div class="coach"><b>Say</b>"Three takeaways. One: Claude can read the published model, but the workspace needs Premium, PPU or Fabric capacity, and we never write to it, because a write stops you downloading the .pbix. Two: for paginated reports, Report Builder makes the connection, Claude edits the file, Report Builder checks it. Three: a Skill is a saved procedure; read-only Skills can run on a schedule, and anything that changes things stays manual."</div>
+  <h3>Homework</h3>
+  <ul class="need">
+    <li>Add a parameter (Year) to the Supplier Scorecard with Claude, and reopen it in Report Builder.</li>
+    <li>Schedule <code class="i">run-snapshot.cmd</code> for tomorrow morning and send the trainer the log.</li>
+    <li>Track A: run <code class="i">/service-check</code> once after the next scheduled refresh.</li>
+  </ul>
+  <h3>60-minute version</h3>
+  <p>Skip part 3 (say the gateway point in one minute), do part 4 steps 3–4 on a pre-made .rdl, and in part 6 show only <code class="i">/loop</code> and leave Task Scheduler as homework.</p>
+</section>
+
+<!-- FILES -->
+<section class="part" id="files">
+  <div class="parthead"><h2>Skill files to copy</h2><span class="who trainer">Reference</span></div>
+  <p>Also in the repo under <code class="i">session-02/skills/</code>. Copy each folder into your project's <code class="i">.claude/skills/</code>, and replace the <code class="i">&lt;workspace-id&gt;</code> and <code class="i">&lt;model-id&gt;</code> placeholders. These are drafts: run each one against your workspace before the session.</p>
+  <details><summary>.claude/skills/service-check/SKILL.md</summary><div><div class="code"><button type="button">Copy</button><pre>---
+name: service-check
+description: Read-only health check of the Meridian semantic model published in the Power BI service - last refresh, refresh history and failures, data sources and gateway, key KPIs with thresholds. Use when asked for a service check, "is the published report OK", or "did last night's refresh work".
+---
+
+# Service check (read-only)
+
+Checks the **published** model, the same way every time. Never changes anything.
+
+## Settings (edit for your workspace)
+
+- Workspace name: `Data Analysis_dev`
+- Workspace ID: `&lt;paste from the URL: app.powerbi.com/groups/&lt;workspace-id&gt;/...&gt;`
+- Semantic model name: `MeridianSupplyChain`
+- Semantic model ID: `&lt;paste from the URL: .../datasets/&lt;model-id&gt;/details&gt;`
+
+## Rules
+
+- Read only. Never create, change, refresh, publish or delete anything.
+- Totals and lists only, never row-level data.
+- If a step fails, say why in one line and carry on.
+
+## Steps
+
+1. **Connect** with the Power BI modeling MCP server:
+   `Connect to semantic model 'MeridianSupplyChain' in Fabric Workspace 'Data Analysis_dev'`
+2. **Last refresh (model side):** run
+   `EVALUATE SELECTCOLUMNS ( INFO.PARTITIONS (), "Table", [Name], "RefreshedTime", [RefreshedTime] )`
+   Report the newest time (UTC and local). Ignore `_Measures`.
+3. **Refresh history, data sources and gateway (service side):** run
+   `powershell -NoProfile -ExecutionPolicy Bypass -File .claude/skills/service-check/scripts/service_check.ps1 -WorkspaceId &lt;id&gt; -DatasetId &lt;id&gt;`
+   Show the last 5 refreshes (type, status, start, duration) and the error text of any failure. List each data source and whether it goes through a gateway.
+4. **Key KPIs:** run the KPI query from the report-snapshot Skill (latest year vs previous) and apply its threshold table.
+
+## Output
+
+Four headings in this order: **Connection**, **Refresh**, **Data sources and gateway**, **KPIs**. End with **Flags**: any failed refresh, a refresh older than 24 hours, a data source without a gateway, any KPI threshold break. Or "No flags today."</pre></div></div></details>
+  <details><summary>.claude/skills/service-check/scripts/service_check.ps1</summary><div><div class="code"><button type="button">Copy</button><pre># Read-only: refresh history, data sources and gateway status of a published semantic model.
+# Usage: powershell -NoProfile -ExecutionPolicy Bypass -File service_check.ps1 -WorkspaceId &lt;guid&gt; -DatasetId &lt;guid&gt; [-Top 5]
+# Needs: Install-Module MicrosoftPowerBIMgmt -Scope CurrentUser   (one time)
+param(
+    [Parameter(Mandatory = $true)][string]$WorkspaceId,
+    [Parameter(Mandatory = $true)][string]$DatasetId,
+    [int]$Top = 5
+)
+$ErrorActionPreference = 'Stop'
+
+if (-not (Get-Module -ListAvailable -Name MicrosoftPowerBIMgmt.Profile)) {
+    Write-Output "MicrosoftPowerBIMgmt is not installed. Run: Install-Module MicrosoftPowerBIMgmt -Scope CurrentUser"
+    exit 1
+}
+Import-Module MicrosoftPowerBIMgmt.Profile
+
+# Reuse an existing sign-in if there is one; otherwise open the browser sign-in.
+try { $null = Get-PowerBIAccessToken } catch { Connect-PowerBIServiceAccount | Out-Null }
+
+$base = "groups/$WorkspaceId/datasets/$DatasetId"
+
+Write-Output "== Refresh history (last $Top) =="
+try {
+    $refreshes = (Invoke-PowerBIRestMethod -Url "$base/refreshes?`$top=$Top" -Method Get | ConvertFrom-Json).value
+    foreach ($r in $refreshes) {
+        $mins = if ($r.endTime) { [math]::Round(((Get-Date $r.endTime) - (Get-Date $r.startTime)).TotalMinutes, 1) } else { 'running' }
+        Write-Output ("{0,-10} {1,-10} start {2}  minutes {3}" -f $r.refreshType, $r.status, $r.startTime, $mins)
+        if ($r.status -eq 'Failed' -and $r.serviceExceptionJson) { Write-Output "    error: $($r.serviceExceptionJson)" }
+    }
+} catch { Write-Output "Could not read refresh history (you need Write permission on the model): $($_.Exception.Message)" }
+
+Write-Output ""
+Write-Output "== Data sources =="
+try {
+    $sources = (Invoke-PowerBIRestMethod -Url "$base/datasources" -Method Get | ConvertFrom-Json).value
+    foreach ($s in $sources) {
+        $gw = if ($s.gatewayId) { "gateway $($s.gatewayId)" } else { 'no gateway' }
+        Write-Output ("{0,-12} {1}  ({2})" -f $s.datasourceType, ($s.connectionDetails | ConvertTo-Json -Compress), $gw)
+        if ($s.gatewayId -and $s.datasourceId) {
+            try {
+                Invoke-PowerBIRestMethod -Url "gateways/$($s.gatewayId)/datasources/$($s.datasourceId)/status" -Method Get | Out-Null
+                Write-Output "    gateway status: OK"
+            } catch { Write-Output "    gateway status: could not check ($($_.Exception.Message))" }
+        }
+    }
+} catch { Write-Output "Could not read data sources: $($_.Exception.Message)" }</pre></div></div></details>
+  <details><summary>.claude/skills/paginated-report/SKILL.md</summary><div><div class="code"><button type="button">Copy</button><pre>---
+name: paginated-report
+description: Edit Power BI paginated report files (.rdl) safely - add or format a table, header, footer, parameters or page settings - and check the XML against the RDL rules before handing it back. Use when asked to change, format or fix a paginated report or an .rdl file, or when Report Builder shows a "Deserialization failed" error.
+---
+
+# Paginated report (.rdl) editor
+
+An .rdl file is XML in the RDL 2016 schema (`http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition`). Report Builder refuses the whole file if one element is wrong, so follow these rules exactly.
+
+## Rules
+
+- **Never touch the data source or dataset connection.** Create those in Report Builder (Power BI semantic model connection). Only change layout, formatting, parameters and expressions.
+- **Back up first:** copy `&lt;name&gt;.rdl` to `&lt;name&gt;.backup.rdl` before the first edit.
+- **Use only elements the schema allows.** Borders are written with a `&lt;Border&gt;` element inside `&lt;Style&gt;`, never `&lt;BorderStyle&gt;`:
+
+  ```xml
+  &lt;Style&gt;
+    &lt;Border&gt;
+      &lt;Color&gt;#cfd4da&lt;/Color&gt;
+      &lt;Style&gt;Solid&lt;/Style&gt;
+      &lt;Width&gt;1pt&lt;/Width&gt;
+    &lt;/Border&gt;
+  &lt;/Style&gt;
+  ```
+
+  Allowed children of `&lt;Style&gt;` include Border, TopBorder, BottomBorder, LeftBorder, RightBorder, BackgroundColor, FontStyle, FontFamily, FontSize, FontWeight, Format, TextDecoration, TextAlign, VerticalAlign, Color, PaddingLeft, PaddingRight, PaddingTop, PaddingBottom (from Report Builder's own error message).
+- Element names are case-sensitive. Keep every element in the order Report Builder wrote it. Don't invent elements.
+- Field references use the dataset's field names exactly, e.g. `=Fields!Supplier.Value`.
+
+## Steps
+
+1. Read the .rdl and list what's in it: data sources, datasets and their fields, parameters, the body items.
+2. Make a backup copy.
+3. Make the requested change, following the rules.
+4. Check: the file is well-formed XML, every `&lt;Style&gt;` child is in the allowed list, and every `Fields!X` exists in the dataset.
+5. Tell the user what changed, and to reopen the file in Report Builder. If Report Builder shows an error, ask them to paste it: the message names the bad element, the expected elements, and the line and position.
+
+## Never
+
+- Publish, render or export the report. That happens in Report Builder or the Power BI service.
+- Put credentials or connection strings in the file.</pre></div></div></details>
+  <details><summary>.claude/skills/refresh-now/SKILL.md</summary><div><div class="code"><button type="button">Copy</button><pre>---
+name: refresh-now
+description: Start an on-demand refresh of the published Meridian semantic model and report whether it succeeded. Only when the user explicitly asks to refresh now.
+disable-model-invocation: true
+---
+
+# Refresh now (changes the service: run only on request)
+
+`disable-model-invocation: true` means Claude never runs this on its own. You must type `/refresh-now`.
+
+## Settings
+
+- Workspace ID: `&lt;workspace-id&gt;`
+- Semantic model ID: `&lt;model-id&gt;`
+
+## Steps
+
+1. Ask the user to confirm: "Start a refresh of MeridianSupplyChain in the service now?" Stop unless they say yes.
+2. Start the refresh:
+   `powershell -NoProfile -ExecutionPolicy Bypass -File .claude/skills/refresh-now/scripts/refresh_now.ps1 -WorkspaceId &lt;workspace-id&gt; -DatasetId &lt;model-id&gt;`
+3. Wait about a minute, then run `.claude/skills/service-check/scripts/service_check.ps1` (same IDs) to read the latest refresh status. Repeat up to 5 times until the status is Completed or Failed.
+4. Report: status, how long it took, and the error text if it failed. If the error mentions a gateway or credentials, say: "check the gateway is running and the data source credentials in the semantic model's settings".
+
+## Notes
+
+- On shared (non-Premium) capacity, the API allows about 8 refresh requests per day.
+- Power BI's own **scheduled refresh** is the right tool for daily refreshes. Use this Skill only for "refresh it now".</pre></div></div></details>
+  <details><summary>.claude/skills/refresh-now/scripts/refresh_now.ps1</summary><div><div class="code"><button type="button">Copy</button><pre># Starts an on-demand refresh of a published semantic model (this CHANGES the service).
+# Usage: powershell -NoProfile -ExecutionPolicy Bypass -File refresh_now.ps1 -WorkspaceId &lt;guid&gt; -DatasetId &lt;guid&gt;
+param(
+    [Parameter(Mandatory = $true)][string]$WorkspaceId,
+    [Parameter(Mandatory = $true)][string]$DatasetId
+)
+$ErrorActionPreference = 'Stop'
+Import-Module MicrosoftPowerBIMgmt.Profile
+try { $null = Get-PowerBIAccessToken } catch { Connect-PowerBIServiceAccount | Out-Null }
+
+Invoke-PowerBIRestMethod -Url "groups/$WorkspaceId/datasets/$DatasetId/refreshes" -Method Post -Body '{}' | Out-Null
+Write-Output "Refresh requested at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'). Check the status with the service-check script in about a minute."</pre></div></div></details>
+</section>
+
+<!-- LICENCES -->
+<section class="part" id="licences">
+  <div class="parthead"><h2>Licences and safety</h2><span class="who trainer">Reference</span></div>
+  <div class="tbl"><table><thead><tr><th>You want to</th><th>Free</th><th>Pro / PPU</th><th>Capacity workspace (Premium, Fabric, trial)</th></tr></thead><tbody>
+    <tr><td>Publish a report to My workspace</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Publish to a shared workspace</td><td>No</td><td>Yes</td><td>Yes, with Pro, PPU or the Fabric trial</td></tr>
+    <tr><td>Claude reads the published model (XMLA)</td><td>No</td><td>Pro: no · PPU: yes</td><td>Yes</td></tr>
+    <tr><td>Publish a paginated report to My workspace</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Publish a paginated report to another workspace</td><td>No</td><td>Yes</td><td>Yes (with Pro or PPU)</td></tr>
+    <tr><td>View someone else's paginated report</td><td>Only on F64 / P1 or larger</td><td>Yes</td><td>Yes</td></tr>
+  </tbody></table></div>
+  <ul class="need">
+    <li><b>Read-only first.</b> Only the <code class="i">--readonly</code> powerbi-modeling server in training sessions.</li>
+    <li><b>Never write to a published model.</b> It blocks downloading the .pbix again. Change Desktop or PBIP, then republish.</li>
+    <li><b>Data leaves your machine.</b> Query results go to the AI provider. Sample data only.</li>
+    <li><b>Schedule only read-only Skills.</b> Anything that changes things stays manual (<code class="i">disable-model-invocation: true</code>).</li>
+    <li><b>Paginated reports:</b> Claude edits the file; Report Builder is the judge.</li>
+  </ul>
+  <p class="note">Sources checked 22 November 2026: Microsoft Learn (XMLA endpoint, Report Builder, paginated reports FAQ, personal gateway, Power BI REST API, MicrosoftPowerBIMgmt), Anthropic Claude Code docs (Skills, headless mode, scheduled tasks, plugins), the anthropics/skills marketplace, and winget. Not yet tested end to end: the service-check and refresh-now scripts against a live workspace, the skill-creator invocation name on a participant machine, and the Task Scheduler run.</p>
+</section>
+
+<footer>Claude + Power BI training · Session 02 guide · Meridian Medical Supply is fictional sample data.</footer>
+</main>
+</div>
+</div>
+
+<script>
+document.querySelectorAll('.code button').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var pre = btn.parentElement.querySelector('pre');
+    var text = pre.innerText;
+    function done(label){ btn.textContent = label; setTimeout(function(){ btn.textContent = 'Copy'; }, 1500); }
+    try {
+      navigator.clipboard.writeText(text).then(function(){ done('Copied'); }, function(){ selectIt(); });
+    } catch (e) { selectIt(); }
+    function selectIt(){ var r = document.createRange(); r.selectNodeContents(pre); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); done('Selected'); }
+  });
+});
+</script>

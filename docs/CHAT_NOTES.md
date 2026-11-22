@@ -105,3 +105,12 @@ Verified results on Meridian: last refresh 9 Nov 2026 12:25 UTC; Revenue 2025 14
 - Building the deck while it's open in PowerPoint fails with `EBUSY`. Close it, or build to another file with the `OUT` env variable.
 - Opening Power BI Desktop through automation can start a second, blank Desktop. Keep only one open so Claude doesn't have to choose.
 - The live map is served from the portfolio site; it deploys on push to that repo.
+
+## 7. Power BI service and paginated reports (tested after Session 01)
+
+- Claude connected to the published model in workspace `Data Analysis_dev` with `Connect to semantic model 'MeridianSupplyChain' in Fabric Workspace '<workspace>'` (XMLA endpoint).
+- XMLA needs a Premium, PPU or Fabric capacity workspace (the Fabric trial gives PPU-level rights). A Free account on My workspace can't connect.
+- Microsoft: "a write operation on a semantic model authored in Power BI Desktop prevents it from being downloaded back as a PBIX file." Never write to the published model in training.
+- Gateway status and refresh history aren't MCP tools; they come from the Power BI REST API (`MicrosoftPowerBIMgmt`, `Invoke-PowerBIRestMethod`). Refresh history needs Write permission. Meridian's CSV source needs a gateway (personal mode is fine for training).
+- Paginated reports: Report Builder (free, winget `Microsoft.PowerBIReportBuilder`) makes the connection; Claude edits the .rdl XML; Report Builder validates. Real error hit: `BorderStyle` is not a valid child of `Style`; borders use a `<Border>` element.
+- Skills: skill-creator is not built in; install with `/plugin marketplace add anthropics/skills` + `/plugin install example-skills@anthropic-agent-skills`. Skills reload live (`/reload-skills` if needed). `claude -p "/skill"` runs a Skill headless; `--allowedTools "mcp__powerbi-modeling__*"`. Scheduling: `/loop` (session), Desktop scheduled tasks (app open), Windows Task Scheduler + `claude -p` (not an Anthropic recipe), cloud `/schedule` can't reach the laptop.

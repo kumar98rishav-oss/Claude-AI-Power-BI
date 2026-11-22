@@ -7,7 +7,17 @@
 - [ ] One full run-through with a stopwatch, including `/report-snapshot` in a fresh Claude session.
 - [ ] Send the participant prep message (in the transcript, "Message to send everyone the day before").
 
-## Session 02: The model as files (PBIP and TMDL)
+## Session 02: Power BI service, paginated reports, Skills (NEW plan)
+
+Guide: `session-02/Session02_Guide.html` (live: https://claude.ai/artifact/8roy9fcyLnf6yWquLktG4y). Skills in `session-02/skills/`.
+
+- [ ] Fill in workspace/model IDs in service-check and refresh-now, and run both against `Data Analysis_dev`.
+- [ ] Install Report Builder and run the paginated-report Skill on a fresh Supplier_Scorecard.rdl.
+- [ ] Check the skill-creator name on a clean machine (`/example-skills:skill-creator` expected).
+- [ ] Test `run-snapshot.cmd` with Task Scheduler once.
+- [ ] Decide each participant's track (A: capacity workspace / B: Free).
+
+## Session 03: The model as files (PBIP and TMDL)
 
 Approved plan:
 

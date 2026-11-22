@@ -8,6 +8,7 @@ Everything for the **Programmers.io "Claude + Power BI"** training programme: de
 | --- | --- |
 | Interactive map (no sign-in, works on a phone) | https://rishav-portfolio-i46g.onrender.com/training/power-bi-internals-map.html |
 | Map's MCP view (TOM/ADOMD.NET, what Claude sees, report-snapshot) | Open the map, then tab **07 MCP** |
+| **Session 02 guide** (Power BI service, paginated reports, Skills + scheduling) | https://claude.ai/artifact/8roy9fcyLnf6yWquLktG4y · [HTML in repo](session-02/Session02_Guide.html) |
 | Session 01 transcript (live, editable) | https://claude.ai/artifact/KahHMqz8xB9U8MsqiuT3rM |
 | Session 01 transcript (in this repo) | [session-01/Session01_Tuesday_Transcript.md](session-01/Session01_Tuesday_Transcript.md) · [PDF](session-01/Session01_Tuesday_Transcript.pdf) |
 | Session 01 deck (20 slides) | [PPTX](session-01/Session01_Connecting_Claude_to_Power_BI.pptx) · [PDF](session-01/Session01_Connecting_Claude_to_Power_BI.pdf) |
@@ -19,7 +20,8 @@ Everything for the **Programmers.io "Claude + Power BI"** training programme: de
 | Session | Topic | Status |
 | --- | --- | --- |
 | 01 | Connecting Claude to Power BI: MCP, TOM and ADOMD.NET, read-only connect, check answers, first Skill (report-snapshot) | Ready |
-| 02 | The model as files: save as PBIP, open in VS Code, Claude renames a column across measures, read the Git diff, undo | Next |
+| 02 | Power BI service: publish, Claude reads the published model (XMLA), gateway + refresh, paginated report with Claude, Skills with skill-creator + scheduling | Next ([guide](session-02/Session02_Guide.html)) |
+| 03 | The model as files: save as PBIP, open in VS Code, Claude renames a column across measures, read the Git diff, undo | Planned |
 | 03+ | Metadata deep dive (TMDL, PBIR), Skills on TMDL, SQL Server source + SQL Server MCP, troubleshooting and performance | Planned |
 
 Objectives across the next 4–5 sessions: automate Power BI reporting; understand Power BI metadata (PBIP, TMDL, PBIR); build Skills with Claude on TMDL; troubleshoot and understand any report.
