@@ -354,6 +354,25 @@ section("Part 1 · Connect");
   txt(s, [{ text: "Expect: ", options: { bold: true, color: "F2B544" } }, { text: "10 tables · 30 measures · 15 relationships on both sides", options: {} }], 6.3, 5.6, 6.43, 0.5, { fontSize: 14, color: C.background2 });
 }
 {
+  const s = slide("LIVE", "PART 1 · EVERYONE ASKS · READ-ONLY", "Ask it like a professional",
+    "ASK LIKE A PROFESSIONAL (about 12 minutes)\n\nSay: Now that Claude is connected to the published model, let's ask the questions a BI lead or an analyst would really ask. Six of them, in this order, because each builds on the last. They're all in the guide with copy buttons.\n\nCoach each one, and after every answer ask: 'How would you check that in Power BI?'\n\n1. Understand the model: an overview of tables, measures by folder, relationships, and which are inactive and why. Expect 10 tables, 30 measures, 15 relationships, 3 inactive.\n2. Is the data fresh: the last refresh time of each table, in UTC and local time.\n3. How's the business doing: 2025 vs 2024 for Revenue, Gross Margin %, On-Time Delivery %, OTIF % and Stockouts, and the biggest concern. Expect revenue up 10.1%, on-time down to 89.8%.\n4. Root cause: which suppliers caused the on-time drop, and the worst one by quarter. Expect Pacific Rim Medical at about 28% and 33% in Q3 and Q4 2025. That's the story moment: pause on it.\n5. Explain a measure: OTIF % in plain English and the columns it depends on.\n6. Model quality: measures with no description or format string, and anything returning blank or an error for 2025. Expect 10 of 30 measures without a description.\n\nSay: Notice everything here only reads. We never change the published model.");
+  pill(s, "p2", true);
+  const q = [["Understand the model", "Overview: tables, measures by folder, relationships, which are inactive and why"],
+    ["Is the data fresh?", "When was each table last refreshed? UTC and my local time"],
+    ["How's the business doing?", "2025 vs 2024: Revenue, Gross Margin %, On-Time %, OTIF %, Stockouts. Biggest concern?"],
+    ["Find the root cause", "Which suppliers caused the on-time drop? The worst one by quarter, 2024 and 2025"],
+    ["Explain a measure", "Explain OTIF % in plain English and list the columns it depends on"],
+    ["Check model quality", "Measures with no description or format? Any blank or error for 2025?"]];
+  q.forEach(([h, p], i) => {
+    const x = 0.6 + (i % 3) * 4.1, y = 1.9 + Math.floor(i / 3) * 2.2;
+    card(s, x, y, 3.9, 2.0, { fill: C.background1, t: 92, line: HEX.lineDark, name: h });
+    num(s, x + 0.22, y + 0.2, i + 1, C.accent3, 0.42);
+    txt(s, h, x + 0.8, y + 0.2, 2.95, 0.42, { fontSize: 16, bold: true, color: C.background1, valign: "middle" });
+    txt(s, p, x + 0.22, y + 0.78, 3.45, 1.1, { fontSize: 13, color: "F2B544", fontFace: MONO });
+  });
+  txt(s, [{ text: "After every answer: ", options: { bold: true, color: "F2B544" } }, { text: "\"How would you check that in Power BI?\"  ·  Story moment: Pacific Rim Medical drops to about 28% on time in Q3 2025", options: {} }], 0.6, 6.35, 12.13, 0.35, { fontSize: 13.5, color: C.background2 });
+}
+{
   const s = slide("CONTENT", "PART 1 · THE ONE RULE FOR THE SERVICE", "Read the published model. Never write to it.",
     "THE RULE (about 2 minutes)\n\nSay: When Claude connected to my workspace, it listed everything it could do: read, query, and also create measures, change relationships, edit roles. Don't let that tempt you.\n\nSay (point at the quote): This is Microsoft's own wording. If you change a Desktop-authored model through the XMLA endpoint, you can never download it back as a .pbix. Your editable copy is gone from the Service.\n\nSay (point at the right): So the workflow is: change the Desktop or PBIP copy, then republish. The Service gets read-only questions: compare, query, check refreshes.\n\nSay: And Claude saying it 'can' change things is a hint that you're on a read-write server. Check /mcp.");
   pill(s, "p2");
@@ -473,20 +492,42 @@ section("Part 3 · Paginated report Skill");
   txt(s, [{ text: "Rule: ", options: { bold: true } }, { text: "Claude edits the file but can't see the report. Report Builder is always the last check.", options: {} }], 0.9, 5.65, 11.6, 0.85, { fontSize: 16, valign: "middle" });
 }
 {
-  const s = slide("LIVE", "PART 3 · EVERYONE DOES THIS", "Build the Supplier Scorecard",
-    "BUILD THE SCORECARD (about 12 minutes)\n\nCoach step 1: 'In Desktop: Optimize › Performance analyzer › Start recording › Refresh visuals. Find Supplier scorecard, expand it, click Copy query.'\n\nCoach step 2: 'Open Report Builder, sign in top right. Report Data › New › Power BI Semantic Model Connection › MeridianSupplyChain. Right-click it › Add Dataset › Query Designer: DAX selected, Design Mode off. Paste, delete any TOPN, Execute Query, OK. Insert › Table › Table Wizard, drag all fields in. Save as reports\\Supplier_Scorecard.rdl in the project folder.'\n\nSay: Don't style it. That's Claude's job.\n\nCoach step 3: 'In Claude, paste the paginated-report prompt.' The Skill makes a backup first.\n\nCoach step 4: 'Back in Report Builder, open the file again and click Run.' If it shows an error, copy the whole message into Claude.\n\nCoach step 5: 'File › Publish › your workspace.'\n\nCheck: bold dark header, borders, 0.0% on the on-time column, A4 landscape, opens in the Service.\n\nIf it fails: no Semantic Model Connection option means not signed in to Report Builder. The DAX errors: remove TOPN and unused __DS0 variables, or ask Claude to simplify the query.");
+  const s = slide("LIVE", "PART 3 · EVERYONE DOES THIS", "Build the Supplier Scorecard, with a filter",
+    "BUILD THE SCORECARD WITH A FILTER (about 15 minutes)\n\nCoach step 1: 'Ask Claude to write the DAX query for the scorecard and to run it against the published model first.' Prompt (in the guide): one row per supplier for 2025 with SupplierName, SupplierTier, PO Lines, Supplier On-Time %, OTIF %, Avg Lead Time (Days) and Avg Days Late, sorted by on-time lowest first; prove it works, then give the final query.\n\nSay: Claude tests its own query on the real model before we use it.\n\nCoach step 2: 'Report Builder: sign in, Report Data, New, Power BI Semantic Model Connection, MeridianSupplyChain. Add Dataset, Query Designer, DAX, Design Mode off, paste, Execute, OK. Insert, Table, Table Wizard, all fields. Save as reports\\Supplier_Scorecard.rdl.'\n\nCoach step 3: 'Paste the /paginated-report prompt: a Supplier Tier parameter with the tiers from the data, the table filtered by it, a title, formatting, red when on-time is below 80%.'\n\nCoach step 4: 'Reopen the file and Run. In the Supplier Tier dropdown, untick Select All, tick one tier, then click View Report.' Expected: Strategic 5 suppliers, Preferred 3, Approved 4.\n\nCoach step 5: 'File, Publish, your workspace.'\n\nIf the list doesn't filter: see the next slide.");
   pill(s, "p4", true);
-  liveSteps(s, [["Copy the DAX", "Desktop › Performance analyzer › Supplier scorecard › Copy query"], ["Plain table in Report Builder", "Semantic Model Connection › DAX dataset › Table Wizard › save .rdl"], ["Claude styles it", "/paginated-report prompt (right) · backup first"], ["Reopen and Run", "Report Builder is the judge"], ["Publish", "File › Publish › your workspace"]], 0.6, 1.9, 5.6);
-  code(s, 6.45, 1.95, 6.28, 3.35, [
-    [["/paginated-report", "k"], [" In reports/Supplier_", "x"]],
-    [["Scorecard.rdl: add a title \"Meridian", "x"]],
-    [["Supplier Scorecard\" and a page footer", "x"]],
-    [["with the page number, make the header row", "x"]],
-    [["bold with a dark background and white", "x"]],
-    [["text, a thin grey border on every cell,", "x"]],
-    [["format on-time % as 0.0%, and set the", "x"]],
-    [["page to A4 landscape.", "x"]],
-  ], { dark: true, size: 13, lang: "text" });
+  liveSteps(s, [["Claude writes and tests the DAX", "Runs it on the published model before you use it"], ["Plain table in Report Builder", "Semantic Model Connection › DAX dataset › Table Wizard"], ["Claude adds the filter", "Supplier Tier parameter + formatting, via /paginated-report"], ["Run: untick Select All, pick a tier", "Then click View Report"], ["Publish", "File › Publish › your workspace"]], 0.6, 1.9, 5.6);
+  code(s, 6.45, 1.95, 6.28, 1.55, [
+    [["Write a DAX query for a paginated report: one row", "x"]],
+    [["per supplier for 2025 ... sorted by on-time lowest", "x"]],
+    [["first. Run it on the published model to prove it.", "s"]],
+  ], { dark: true, size: 12.5, lang: "text" });
+  code(s, 6.45, 3.65, 6.28, 2.1, [
+    [["/paginated-report", "k"], [" add a report parameter", "x"]],
+    [["\"Supplier Tier\" (one or more, list from the data),", "x"]],
+    [["filter the table by it, title \"Supplier Scorecard", "x"]],
+    [["2025\" with the selected tiers, % columns as 0.0%,", "x"]],
+    [["on-time below 80% in red, A4 landscape.", "x"]],
+  ], { dark: true, size: 12.5, lang: "text" });
+  txt(s, [{ text: "Expect: ", options: { bold: true, color: "F2B544" } }, { text: "Strategic 5 suppliers · Preferred 3 · Approved 4", options: {} }], 6.45, 5.95, 6.28, 0.4, { fontSize: 14, color: C.background2 });
+}
+{
+  const s = slide("CONTENT", "PART 3 · A REAL QUESTION FROM OUR TEST RUN", "\"I picked a tier, but the list didn't filter\"",
+    "THE FILTER THAT DIDN'T FILTER (about 3 minutes)\n\nSay: When we tested this, someone picked a tier in the dropdown and the table still showed all 12 suppliers. So we opened the .rdl and checked it.\n\nSay (point left): The report was right. The parameter takes its list from the data: Strategic, Preferred, Approved. The table has a filter: SupplierTier In the parameter. And the field is mapped to the same column as the list.\n\nSay (point right): The cause was how the dropdown works. The default is all tiers, so Select All is ticked when the report opens; ticking one more tier changes nothing. And changing the dropdown doesn't refresh the report: you have to click View Report.\n\nSay (point at the bottom): Two small changes stop the confusion: remove the default so the reader must choose, and show the selected tiers and the supplier count under the title. Claude can make both changes in one prompt.");
+  pill(s, "p4");
+  card(s, 0.6, 1.9, 5.9, 3.55, { line: C.accent4, lw: 1.5, fill: C.background1, name: "What we checked" });
+  txt(s, "WHAT WE CHECKED IN THE .RDL", 0.85, 2.05, 5.4, 0.3, { fontSize: 12, bold: true, color: C.accent4, charSpacing: 1.2 });
+  txt(s, bullets(["Parameter list comes from the data: Strategic, Preferred, Approved", "Table filter: SupplierTier In the parameter", "Field mapped to the same column as the list", "Result: the report logic was correct"], { gap: 9 }), 0.85, 2.5, 5.4, 2.8, { fontSize: 15 });
+  card(s, 6.83, 1.9, 5.9, 3.55, { line: C.accent5, lw: 1.5, fill: C.background1, name: "Real cause" });
+  txt(s, "THE REAL CAUSE: HOW THE DROPDOWN WORKS", 7.08, 2.05, 5.4, 0.3, { fontSize: 12, bold: true, color: C.accent5, charSpacing: 1.2 });
+  const fix = [["Select All was still ticked", "The default is every tier. Untick Select All, then tick one"], ["View Report wasn't clicked", "Changing the dropdown doesn't refresh the report"], ["Check the counts", "Strategic 5 · Preferred 3 · Approved 4"]];
+  fix.forEach(([h, d], i) => {
+    const y = 2.5 + i * 0.95;
+    num(s, 7.08, y, i + 1, C.accent5, 0.4);
+    txt(s, h, 7.62, y - 0.02, 4.9, 0.35, { fontSize: 15, bold: true });
+    txt(s, d, 7.62, y + 0.33, 4.9, 0.5, { fontSize: 13, color: C.accent6 });
+  });
+  card(s, 0.6, 5.7, 12.13, 0.95, { fill: C.accent2, t: 90, name: "Tip" });
+  txt(s, [{ text: "Make it obvious: ", options: { bold: true } }, { text: "remove the default so the reader must choose, and show ", options: {} }, { text: "=\"Tiers: \" & Join(Parameters!SupplierTier.Label, \", \")", options: { fontFace: MONO, color: C.accent2 } }, { text: " under the title.", options: {} }], 0.9, 5.7, 11.6, 0.95, { fontSize: 14.5, valign: "middle" });
 }
 {
   const s = slide("CONTENT", "PART 3 · A REAL ERROR FROM OUR TEST RUN", "Turn a mistake into a rule",
@@ -505,17 +546,37 @@ section("Part 3 · Paginated report Skill");
   txt(s, "RIGHT · A BORDER ELEMENT INSIDE STYLE", 7.08, 3.9, 5.4, 0.3, { fontSize: 11.5, bold: true, color: C.accent4, charSpacing: 1.2 });
   code(s, 7.08, 4.35, 5.4, 2.0, [[["<Style>", "k"]], [["  <Border>", "a"]], [["    <Color>#cfd4da</Color>", "x"]], [["    <Style>Solid</Style>", "x"]], [["    <Width>1pt</Width>", "x"]], [["  </Border>", "a"]], [["</Style>", "k"]]], { size: 12.5, lang: "text" });
 }
+{
+  const s = slide("CONTENT", "PART 3 · ALREADY PUBLISHED", "Already published? Download, edit, republish",
+    "ALREADY PUBLISHED (about 3 minutes)\n\nSay: A common question: can Claude connect to a paginated report that's already in the Service? Partly. The MCP server connects to semantic models, the data, not to reports. For the report itself, we use the file or the Power BI REST API.\n\nSay (go down the table): The data behind it: yes, through the MCP server, like today. Editing it: yes, download the .rdl from the Service, Claude edits it, Report Builder checks it, republish over the old one. Listing and downloading reports by script, and running a report with a parameter to get a PDF: the REST API can do this; on capacity workspaces it should work, but test it on your workspace first. Watching it live like a person in the browser: no.\n\nSay (point at the bottom strip): The everyday route is the four steps at the bottom: download, edit, check, republish.\n\nIf asked: the export-to-file API for paginated reports needs a Premium or Fabric capacity workspace as far as we know; we haven't tested it on our workspace yet.");
+  pill(s, "p4");
+  const rows = [[H("You want to"), H("How"), H("Works?")],
+    ["Query the data behind it", "Power BI MCP server on its semantic model", { text: "Yes", options: { bold: true, color: C.accent4 } }],
+    ["Edit the published report", "Download the .rdl, Claude edits, Report Builder checks, republish", { text: "Yes", options: { bold: true, color: C.accent4 } }],
+    ["List or download reports by script", "Power BI REST API (PowerShell)", { text: "Test on your workspace", options: { bold: true, color: C.accent3 } }],
+    ["Run it with a parameter → PDF / Excel", "REST API export to file, on a capacity workspace", { text: "Test on your workspace", options: { bold: true, color: C.accent3 } }],
+    ["Watch it live, like in the browser", "Nothing does this", { text: "No", options: { bold: true, color: C.accent5 } }]];
+  s.addTable(rows, Object.assign({}, TBL, { x: 0.6, y: 1.9, w: 12.13, colW: [3.9, 5.73, 2.5], rowH: 0.55, fontSize: 14 }));
+  const st = ["File › Download this file (.rdl)", "/paginated-report ...your change", "Report Builder › Run", "File › Publish (overwrite)"];
+  st.forEach((t, i) => {
+    const x = 0.6 + i * 3.1;
+    card(s, x, 5.65, 2.85, 0.85, { fill: C.accent2, t: 90, name: t });
+    num(s, x + 0.18, 5.86, i + 1, C.accent2, 0.42);
+    txt(s, t, x + 0.72, 5.65, 2.05, 0.85, { fontSize: 13.5, bold: true, valign: "middle" });
+    if (i < 3) arrow(s, x + 2.87, 6.07, x + 3.08, 6.07, C.accent6, 1.75);
+  });
+}
 
 section("Part 4 · Build your own Skill");
 {
-  const s = slide("LIVE", "PART 4 · EVERYONE DOES THIS", "Create a Skill with skill-creator",
-    "SKILL-CREATOR (about 10 minutes)\n\nSay: skill-creator is a Skill that writes Skills. It isn't built into Claude Code; it comes from Anthropic's skills marketplace, so we install it once.\n\nCoach step 1: 'In a terminal Claude session, type the first plugin line, wait, then the second. If it asks where, choose user.' If /plugin isn't recognised (VS Code chat panel), use the claude plugin lines in a normal terminal instead.\n\nCoach step 2: 'Type /skill and look at the suggestions.' Plugin Skills are named plugin:skill, so expect /example-skills:skill-creator. On my machine it's /anthropic-skills:skill-creator from a different plugin. Use whatever the list shows.\n\nCoach step 3: 'Paste the prompt from the guide (Part 5, step 3). Answer its questions, then read the SKILL.md it writes before you accept it.'\n\nCoach step 4: 'Type /service-check.' Expected: four headings and a Flags list. Then commit it to Git.\n\nSay: New Skills load without a restart. If one doesn't show up, run /reload-skills.\n\nShort on time: copy the ready-made service-check folder from the guide's Skill files section instead.");
+  const s = slide("LIVE", "PART 4 · EVERYONE DOES THIS", "Turn today's work into a Skill",
+    "SKILL-CREATOR (about 10 minutes)\n\nSay: skill-creator is a Skill that writes Skills. It isn't built into Claude Code; it comes from Anthropic's skills marketplace, so we install it once.\n\nCoach step 1: 'In a terminal Claude session, type the two plugin lines. If it asks where, choose user.' If /plugin isn't recognised (VS Code chat panel), run 'claude plugin marketplace add anthropics/skills' and 'claude plugin install example-skills@anthropic-agent-skills' in a normal terminal.\n\nCoach step 2: 'Type /skill and look at the list.' Expect /example-skills:skill-creator. On my machine it's /anthropic-skills:skill-creator. Use whatever the list shows.\n\nCoach step 3: 'Paste the supplier-watch prompt from the guide.' It's read-only, connects to the published model, runs the scorecard query we built, takes an optional tier, and flags suppliers below 80% on-time or 85% OTIF. 'Answer its questions, then read the SKILL.md before you accept it.'\n\nCoach step 4: 'Run /supplier-watch, then /supplier-watch Strategic. Then commit it to Git.' Expected: Pacific Rim Medical near the top of the flagged list.\n\nSay: That's the pattern for every Skill you'll build: do the work once by hand, then ask skill-creator to save it.\n\nNew Skills load without a restart; if one doesn't show, /reload-skills.");
   pill(s, "p5", true);
-  liveSteps(s, [["Install skill-creator (once)", "From Anthropic's skills marketplace"], ["Find its name", "Type /skill · expect /example-skills:skill-creator"], ["Describe the Skill you want", "Prompt in the guide · read what it writes"], ["Run it, then commit", "/service-check · git add + commit"]], 0.6, 1.95, 5.6);
-  code(s, 6.45, 1.95, 6.28, 1.2, [[["/plugin marketplace add anthropics/skills", "x"]], [["/plugin install example-skills@anthropic-agent-skills", "x"]]], { dark: true, size: 12.5, lang: "text" });
-  code(s, 6.45, 3.3, 6.28, 1.35, [[["/example-skills:skill-creator", "k"], [" Create a project", "x"]], [["skill called service-check ... read-only ...", "x"]], [["ends with a Flags list.", "x"]]], { dark: true, size: 12.5, lang: "text" });
-  code(s, 6.45, 4.8, 6.28, 1.3, [[["/service-check", "k"]], [["git add .claude/skills/service-check", "x"]], [["git commit -m \"Add service-check skill\"", "x"]]], { dark: true, size: 12.5, lang: "text" });
-  txt(s, "Skills reload automatically · if not: /reload-skills", 6.45, 6.25, 6.28, 0.35, { fontSize: 13, color: C.background2, transparency: 25 });
+  liveSteps(s, [["Install skill-creator (once)", "From Anthropic's skills marketplace"], ["Find its name", "Type /skill · expect /example-skills:skill-creator"], ["Describe supplier-watch", "Built from today's scorecard query · read what it writes"], ["Run it, then commit", "/supplier-watch Strategic · git add + commit"]], 0.6, 1.95, 5.6);
+  code(s, 6.45, 1.95, 6.28, 1.0, [[["/plugin marketplace add anthropics/skills", "x"]], [["/plugin install example-skills@anthropic-agent-skills", "x"]]], { dark: true, size: 12, lang: "text" });
+  code(s, 6.45, 3.1, 6.28, 1.9, [[["/example-skills:skill-creator", "k"], [" Create a project", "x"]], [["skill called supplier-watch. Read-only. It runs", "x"]], [["our supplier scorecard query on the published", "x"]], [["model, takes an optional tier, and flags suppliers", "x"]], [["below 80% on-time or 85% OTIF.", "x"]]], { dark: true, size: 12, lang: "text" });
+  code(s, 6.45, 5.15, 6.28, 1.15, [[["/supplier-watch Strategic", "k"]], [["git add .claude/skills/supplier-watch", "x"]], [["git commit -m \"Add supplier-watch skill\"", "x"]]], { dark: true, size: 12, lang: "text" });
+  txt(s, "Do the work once by hand, then save it as a Skill", 6.45, 6.38, 6.28, 0.3, { fontSize: 13, color: C.background2, transparency: 25 });
 }
 
 section("Part 5 · Automate");
@@ -562,15 +623,55 @@ section("Part 5 · Automate");
   txt(s, "Unattended runs against the Service need a sign-in that's still valid (a service principal from IT, long term). Against Desktop, nothing extra.", 0.6, 6.05, 12.13, 0.55, { fontSize: 13, color: C.accent6 });
 }
 {
-  const s = slide("LIVE", "PART 5 · LIVE + HOMEWORK", "Schedule a read-only Skill",
-    "SCHEDULE IT (about 7 minutes)\n\nDo step 1 live: type the /loop line. Say: Every 30 minutes, while this session is open, Claude runs report-snapshot. Stop it by saying 'cancel the report-snapshot loop'.\n\nSay step 2: claude -p runs one prompt and exits. A /skill-name in the prompt runs that Skill. --allowedTools lists what it may use without asking, because nobody is there to click Yes. Try it by hand first.\n\nSay step 3: save run-snapshot.cmd in the project folder (it's in the guide), then one schtasks line schedules it for 9 am on weekdays. schtasks /Run tests it now; type logs\\snapshot.log shows the result.\n\nSay (point at the warning): Only schedule read-only Skills. A scheduled run approves its own tool calls, so never schedule refresh-now. And for the published model, unattended runs need a sign-in that's still valid; if it asks you to sign in every morning, that needs a service principal from IT. So today we schedule report-snapshot against Desktop, which needs no sign-in.\n\nHomework: schedule it for tomorrow morning and send me the log.");
+  const s = slide("LIVE", "PART 5 · LIVE + HOMEWORK", "Schedule supplier-watch",
+    "SCHEDULE IT (about 7 minutes)\n\nDo step 1 live: type the /loop line. Say: every 30 minutes, while this session is open, Claude runs supplier-watch. Stop it by saying 'cancel the supplier-watch loop'.\n\nSay step 2: claude -p runs one prompt and exits. A /skill-name in the prompt runs that Skill. --allowedTools lists what it may use without asking, because nobody is there to click Yes. Try it by hand first.\n\nSay step 3: run-supplier-watch.cmd in the project folder (it's in the guide) writes the result to logs\\supplier-watch.log. One schtasks line schedules it for 9 am on weekdays; schtasks /Run tests it now.\n\nSay (point at the warning): only schedule read-only Skills, because a scheduled run approves its own tool calls. And a run against the Service needs a sign-in that's still valid: test it with schtasks /Run while you're signed in.\n\nSay: All of this runs on your laptop. The next slide asks the obvious question: what if the laptop is off?\n\nHomework: schedule it for tomorrow morning and send me the log.");
   pill(s, "p6", true);
-  liveSteps(s, [["Live: /loop", "Runs every 30 min while the session is open"], ["Try headless by hand", "claude -p runs one Skill and exits"], ["Schedule it with Windows", "run-snapshot.cmd + schtasks · read logs\\snapshot.log"]], 0.6, 1.95, 5.2);
-  code(s, 6.1, 1.95, 6.63, 0.6, [[["/loop 30m /report-snapshot", "k"]]], { dark: true, size: 13, lang: "text" });
-  code(s, 6.1, 2.7, 6.63, 1.0, [[["claude -p \"/report-snapshot\" --allowedTools", "x"]], [["  \"mcp__powerbi-modeling__*\" \"Bash(python *)\" --max-turns 30", "x"]]], { dark: true, size: 12, lang: "text" });
-  code(s, 6.1, 3.85, 6.63, 1.3, [[["schtasks /Create /TN \"Meridian report snapshot\"", "x"]], [["  /SC WEEKLY /D MON,TUE,WED,THU,FRI /ST 09:00", "x"]], [["  /TR \"C:\\Training\\pbip-project\\run-snapshot.cmd\"", "x"]]], { dark: true, size: 12, lang: "text" });
+  liveSteps(s, [["Live: /loop", "Runs every 30 min while the session is open"], ["Try headless by hand", "claude -p runs one Skill and exits"], ["Schedule it with Windows", "run-supplier-watch.cmd + schtasks · read the log"]], 0.6, 1.95, 5.2);
+  code(s, 6.1, 1.95, 6.63, 0.6, [[["/loop 30m /supplier-watch", "k"]]], { dark: true, size: 13, lang: "text" });
+  code(s, 6.1, 2.7, 6.63, 1.0, [[["claude -p \"/supplier-watch\" --allowedTools", "x"]], [["  \"mcp__powerbi-modeling__*\" --max-turns 30", "x"]]], { dark: true, size: 12.5, lang: "text" });
+  code(s, 6.1, 3.85, 6.63, 1.3, [[["schtasks /Create /TN \"Supplier watch\" /SC WEEKLY", "x"]], [["  /D MON,TUE,WED,THU,FRI /ST 09:00", "x"]], [["  /TR \"<project>\\run-supplier-watch.cmd\"", "x"]]], { dark: true, size: 12.5, lang: "text" });
   card(s, 6.1, 5.35, 6.63, 1.2, { fill: C.accent5, t: 85, line: C.accent5, name: "Warning" });
-  txt(s, [{ text: "Only schedule read-only Skills. ", options: { bold: true, color: "FF9A8F" } }, { text: "A scheduled run approves its own tool calls. Never schedule refresh-now.", options: {} }], 6.35, 5.35, 6.2, 1.2, { fontSize: 14, color: C.background1, valign: "middle" });
+  txt(s, [{ text: "Only schedule read-only Skills. ", options: { bold: true, color: "FF9A8F" } }, { text: "A scheduled run approves its own tool calls. Test with schtasks /Run while signed in.", options: {} }], 6.35, 5.35, 6.2, 1.2, { fontSize: 14, color: C.background1, valign: "middle" });
+}
+{
+  const s = slide("CONTENT", "PART 5 · THE OBVIOUS QUESTION", "Does my laptop need to be on?",
+    "LAPTOP ON OR OFF (about 3 minutes)\n\nSay: Everything we scheduled so far runs on your laptop. So yes: for those, the laptop must be on, logged in and still signed in to Power BI. Task Scheduler can wake it from sleep, but not from shut down.\n\nSay (go down the table): /loop, Task Scheduler and Claude Desktop's local scheduled tasks all run on your machine. Power BI's own subscription runs in Power BI's cloud: it emails the paginated report on a schedule with no laptop and no Claude. Cowork scheduled tasks run on Anthropic's servers, so they work with the laptop off, but only with connectors like Gmail and the internet; they can't use our MCP server, scripts or local files. Claude Code cloud scheduled tasks are similar: a fresh copy of a Git repo and the internet, no local files.\n\nSay (point at the strip): and one more thing. Meridian's data still lives on this laptop, so the Power BI refresh needs it on until we move the data to SQL Server. Fully laptop-free comes later.\n\nQuote if asked (Anthropic help): Cowork 'scheduled tasks run remotely, so they run on their cadence even when your computer is asleep or the Claude Desktop app is closed' (unless you select a local folder, which turns on 'Require this computer').");
+  pill(s, "p6");
+  const Y = t => ({ text: t, options: { bold: true, color: C.accent4 } }), N = t => ({ text: t, options: { bold: true, color: C.accent5 } });
+  const rows = [[H("Option"), H("Runs on"), H("Laptop off?"), H("Can use our Power BI setup?")],
+    ["/loop", "Your open Claude session", N("No"), Y("Yes")],
+    ["Windows Task Scheduler + claude -p", "Your laptop", N("No (can wake from sleep)"), Y("Yes")],
+    ["Claude Desktop scheduled task (local)", "Your laptop, app open", N("No"), Y("Yes")],
+    ["Power BI subscription", "Power BI cloud", Y("Yes"), "Emails the report; no Claude"],
+    ["Cowork scheduled task (no folder)", "Anthropic's cloud", Y("Yes"), "Connectors only (e.g. Gmail); no MCP, scripts or files"],
+    ["Claude Code cloud scheduled task", "Anthropic's cloud", Y("Yes"), "A Git repo + internet; no local files"]];
+  s.addTable(rows, Object.assign({}, TBL, { x: 0.6, y: 1.85, w: 12.13, colW: [3.6, 2.7, 2.4, 3.43], rowH: 0.52, fontSize: 13.5 }));
+  card(s, 0.6, 5.75, 12.13, 0.85, { fill: C.accent3, t: 88, name: "Data note" });
+  txt(s, [{ text: "Still true: ", options: { bold: true } }, { text: "Meridian's data lives on this laptop, so the Power BI refresh needs it on until the data moves to SQL Server.", options: {} }], 0.9, 5.75, 11.6, 0.85, { fontSize: 14.5, valign: "middle" });
+}
+{
+  const s = slide("CONTENT", "PART 5 · LAPTOP OFF", "Power BI delivers, Cowork explains",
+    "LAPTOP OFF: POWER BI + COWORK (about 3 minutes)\n\nSay: Here's a weekly flow that works with the laptop off, using two cloud services.\n\nSay (follow the flow): Monday 9:00, a Power BI subscription on the paginated report emails the Supplier Scorecard PDF, with the tier set to Strategic. That's built into Power BI. At 9:30, a Cowork scheduled task, created without selecting a folder so it runs in the cloud, uses the Gmail connector to find that email, reads the PDF, and writes five bullet points: who's below the line, the worst supplier, what changed since last week.\n\nSay: Power BI delivers. Cowork explains. You read five bullets.\n\nSay (point at the limits): Two honest limits. The numbers are only as fresh as the last refresh, and our refresh still needs the laptop. And Cowork talking to Power BI directly isn't proven: a Fabric connector failed to connect on our machine. Reading the email is the route that works today.\n\nDo (optional demo): show the Cowork prompt and the subscription settings.");
+  pill(s, "p6");
+  const n = [["Mon 09:00", "Power BI subscription", "Emails the Supplier Scorecard PDF · Tier = Strategic", C.accent1], ["Mon 09:30", "Cowork scheduled task", "No folder selected · runs in the cloud", C.accent3], ["Gmail connector", "Finds the email, reads the PDF", "", C.accent2], ["You", "Five bullets", "Who's below the line, the worst supplier, what changed", C.text1]];
+  n.forEach(([t, h, d, col], i) => {
+    const x = 0.6 + i * 3.1;
+    card(s, x, 1.9, 2.85, 2.2, { line: col, lw: 1.5, fill: C.background1, name: h });
+    txt(s, t.toUpperCase(), x + 0.22, 2.05, 2.45, 0.3, { fontSize: 11.5, bold: true, color: col, charSpacing: 1.2 });
+    txt(s, h, x + 0.22, 2.4, 2.45, 0.7, { fontSize: 16.5, bold: true });
+    txt(s, d, x + 0.22, 3.1, 2.45, 0.9, { fontSize: 12.5, color: C.accent6 });
+    if (i < 3) arrow(s, x + 2.87, 3.0, x + 3.08, 3.0, C.accent6, 1.75);
+  });
+  txt(s, "THE COWORK PROMPT", 0.6, 4.35, 6, 0.3, { fontSize: 12, bold: true, color: C.accent6, charSpacing: 1.5 });
+  code(s, 0.6, 4.7, 7.3, 1.85, [
+    [["Find this week's email with the Supplier Scorecard", "x"]],
+    [["PDF from Power BI. Read it and summarise: suppliers", "x"]],
+    [["below 80% on-time or 85% OTIF, the worst supplier,", "x"]],
+    [["and what changed since last week. 5 bullet points.", "x"]],
+  ], { size: 12.5, lang: "text" });
+  card(s, 8.2, 4.35, 4.53, 2.2, { fill: C.accent5, t: 92, name: "Limits" });
+  txt(s, "TWO HONEST LIMITS", 8.45, 4.5, 4.1, 0.3, { fontSize: 12, bold: true, color: C.accent5, charSpacing: 1.2 });
+  txt(s, bullets(["Numbers are as fresh as the last refresh, which still needs the laptop", "Cowork talking to Power BI directly isn't proven yet"], { gap: 8 }), 8.45, 4.9, 4.1, 1.6, { fontSize: 13.5 });
 }
 
 section("Close");
@@ -590,7 +691,7 @@ section("Close");
 }
 {
   const s = slide("DARK", "NEXT · SESSION 03 · THE MODEL AS FILES", "Next: the model as files",
-    "CLOSE (about 3 minutes)\n\nSay: Three takeaways. One: Claude can read the published model, but only on Premium, PPU or Fabric capacity, and we never write to it. Two: a Skill is a saved procedure: same steps, same output, shared through Git, and it can check, print or act. Three: read-only Skills can run on a schedule, and anything that acts stays manual.\n\nSay: Homework: add a Year parameter to the Supplier Scorecard with Claude and reopen it in Report Builder; schedule run-snapshot.cmd for tomorrow and send me the log; Track A, run /service-check after the next scheduled refresh.\n\nSay: Next session: we save Meridian as a PBIP project, open the folder in VS Code, and let Claude change the model as files, then read the Git diff and undo it.\n\nDo: paste the guide link in the chat. Questions?");
+    "CLOSE (about 3 minutes)\n\nSay: Three takeaways. One: Claude can read the published model, but only on Premium, PPU or Fabric capacity, and we never write to it. Two: a Skill is a saved procedure: same steps, same output, shared through Git, and it can check, print or act. Three: read-only Skills can run on a schedule, and anything that acts stays manual.\n\nSay: Homework: add a Year parameter to the Supplier Scorecard with Claude and reopen it in Report Builder; schedule run-snapshot.cmd for tomorrow and send me the log; Track A, run /service-check after the next scheduled refresh.\n\nSay: And remember the laptop question: on your laptop, Claude can do everything; with the laptop off, Power BI delivers the report and Cowork explains it.\n\nSay: Next session: we save Meridian as a PBIP project, open the folder in VS Code, and let Claude change the model as files, then read the Git diff and undo it.\n\nDo: paste the guide link in the chat. Questions?");
   s.addText("Save as PBIP, let Claude edit the files, read the Git diff and undo it", { placeholder: "sub" });
   const take = [["Read, never write", "Claude on the published model; changes go through Desktop"], ["A Skill is a saved procedure", "Same steps, same output, shared through Git"], ["Read-only runs itself", "Schedule checks; anything that acts stays manual"]];
   take.forEach(([h, d], i) => {
